@@ -1,0 +1,27 @@
+﻿<mui:ModernWindow x:Class="Dota_Toolbox.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+		Title="Dota 2 - Modding Toolbox" IsTitleVisible="True"
+		ContentSource="/Pages/Toolbox.xaml"
+		MinWidth="800" MinHeight="600">
+
+	<mui:ModernWindow.MenuLinkGroups>
+		<mui:LinkGroup DisplayName="TOOLBOX">
+			<mui:LinkGroup.Links>
+				<mui:Link DisplayName="index" Source="/Pages/Toolbox.xaml" />
+			</mui:LinkGroup.Links>
+		</mui:LinkGroup>
+		<mui:LinkGroup DisplayName="toolbox" GroupKey="settings">
+			<mui:LinkGroup.Links>
+				<mui:Link DisplayName="settings" Source="/Pages/SettingsPage.xaml" />
+			</mui:LinkGroup.Links>
+		</mui:LinkGroup>
+	</mui:ModernWindow.MenuLinkGroups>
+
+	<mui:ModernWindow.TitleLinks>
+		<mui:Link DisplayName="index" Source="/Pages/Toolbox.xaml" />
+		<mui:Link DisplayName="settings" Source="/Pages/SettingsPage.xaml" />
+		<mui:Link DisplayName="help" Source="https://developer.valvesoftware.com/wiki/Dota_2_Workshop_Tools" />
+	</mui:ModernWindow.TitleLinks>
+</mui:ModernWindow>

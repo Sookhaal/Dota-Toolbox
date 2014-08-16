@@ -12,10 +12,11 @@ namespace Dota_Toolbox.Settings
 {
 	public class ApplicationSettings
 	{
+		#region Hidden Settings/Informations
 		private static ApplicationSettings _instance;
-		private string _dotaPath, _currentMod, _currentModePath, _theme;
-		private Color _accentColor;
+		private static string _applicationPath;
 
+		[XmlIgnore]
 		public static ApplicationSettings instance
 		{
 			get
@@ -24,11 +25,19 @@ namespace Dota_Toolbox.Settings
 					_instance = new ApplicationSettings();
 				return _instance;
 			}
-			set
-			{
-				_instance = value;
-			}
+			set { _instance = value; }
 		}
+
+		[XmlIgnore]
+		public static string applicationPath
+		{
+			get { return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location); }
+		}
+		#endregion
+
+		#region Exposed Settings
+		private string _dotaPath, _currentMod, _currentModePath, _theme;
+		private Color _accentColor;
 
 		[XmlElement("DotaPath")]
 		public string dotaPath
@@ -64,5 +73,6 @@ namespace Dota_Toolbox.Settings
 			get { return _accentColor; }
 			set { _accentColor = value; }
 		}
+		#endregion
 	}
 }

@@ -1,16 +1,12 @@
 ﻿using Dota_Toolbox.Parser;
 using Dota_Toolbox.Settings;
-using FirstFloor.ModernUI.Windows.Controls;
+using Dota_Toolbox.Windows;
 using KVLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -26,10 +22,11 @@ namespace Dota_Toolbox.Pages.Tools
 		private List<KeyValue> tempList = new List<KeyValue>();
 		private string herolistPath, selectedHeroName, file = "testing.txt";
 		private KVDocument doc = new KVDocument();
-		List<DockPanel> docks;
-		TreeViewItem treeItem;
-		Binding nameBinding, enableBinding;
-		AddHeroDialog addHeroDialog;
+		private List<DockPanel> docks;
+		private TreeViewItem treeItem;
+		private Binding nameBinding, enableBinding;
+		private AddHeroWindow addHeroWindow;
+		private DotaData.Hero newHero;
 
 		public HerolistEditor()
 		{
@@ -67,7 +64,7 @@ namespace Dota_Toolbox.Pages.Tools
 				removeHeroButton.Content = "Remove " + herolist_list[herolist_list.Count - 1].name;
 		}
 
-		void UpdateTreeView()
+		private void UpdateTreeView()
 		{
 			treeItem.Items.Clear();
 			docks.Clear();
@@ -101,21 +98,42 @@ namespace Dota_Toolbox.Pages.Tools
 			herolist_treeview.Items.Add(treeItem);
 		}
 
-		private void AddHero()
+		public void AddHero(string name)
+		{
+			newHero = new DotaData.Hero { name = name, enable = true };
+			herolist_list.Add(newHero);
+			UpdateTreeView();
+			ToggleRemoveButton();
+		}
+
+		private void OpenAddHeroWindow()
 		{
 			/*MessageBoxButton btn = MessageBoxButton.OK;
 			ModernDialog.ShowMessage("", "", btn);*/
-			addHeroDialog = new AddHeroDialog();
-			addHeroDialog.ShowDialog();
-			string t = addHeroDialog.MessageBoxResult.ToString();
-			Console.WriteLine(t);
-			if (addHeroDialog.MessageBoxResult.ToString() == "OK")
+
+			try
+			{
+				addHeroWindow.Show();
+			}
+			catch
+			{
+				addHeroWindow = new AddHeroWindow();
+				addHeroWindow.parentWindow = this;
+				addHeroWindow.Show();
+			}
+
+			/*ModernWindow w = new Dota_Toolbox.Windows.BlankWindow();
+			w.Show();*/
+
+			//string t = addHeroDialog.MessageBoxResult.ToString();
+			//Console.WriteLine(t);
+			/*if (addHeroDialog.MessageBoxResult.ToString() == "OK")
 			{
 				var d = new DotaData.Hero { name = "Added 1", enable = true };
 				herolist_list.Add(d);
-			}
-			UpdateTreeView();
-			ToggleRemoveButton();
+			}*/
+			//UpdateTreeView();
+			//ToggleRemoveButton();
 		}
 
 		private void RemoveHero()
@@ -167,7 +185,7 @@ namespace Dota_Toolbox.Pages.Tools
 
 		private void AddHeroClick(object sender, RoutedEventArgs e)
 		{
-			AddHero();
+			OpenAddHeroWindow();
 		}
 
 		private void RemoveHeroClick(object sender, RoutedEventArgs e)
@@ -175,8 +193,9 @@ namespace Dota_Toolbox.Pages.Tools
 			RemoveHero();
 		}
 
-		TextBox tempTextbox;
-		DockPanel tempStackpanel;
+		private TextBox tempTextbox;
+		private DockPanel tempStackpanel;
+
 		private void HeroClick(object sender, MouseButtonEventArgs e)
 		{
 			tempStackpanel = sender as DockPanel;
@@ -187,7 +206,7 @@ namespace Dota_Toolbox.Pages.Tools
 				RemoveHero();
 		}
 
-		#endregion
+		#endregion UI Events
 
 		/*private string ProperHeroName(string rawHeroName)
 		{

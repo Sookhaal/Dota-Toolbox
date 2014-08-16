@@ -75,9 +75,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Windows\AddHeroDialog.xaml.cs">
-      <DependentUpon>AddHeroDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Tools\HerolistEditor.xaml.cs">
       <DependentUpon>HerolistEditor.xaml</DependentUpon>
     </Compile>
@@ -87,6 +84,10 @@
     <Compile Include="Parser\DotaData.cs" />
     <Compile Include="Parser\KVDocument.cs" />
     <Compile Include="Settings\ApplicationSettings.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Windows\AddHeroWindow.xaml.cs">
+      <DependentUpon>AddHeroWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ErrorDialog.xaml.cs">
       <DependentUpon>ErrorDialog.xaml</DependentUpon>
     </Compile>
@@ -98,10 +99,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Windows\AddHeroDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\Settings\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -144,6 +141,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Tools\Testing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AddHeroWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

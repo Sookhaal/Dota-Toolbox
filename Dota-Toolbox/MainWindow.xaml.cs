@@ -25,5 +25,10 @@ namespace Dota_Toolbox
 		{
 			InitializeComponent();
 		}
+
+		private void ApplicationClosing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			Application.Current.Shutdown();
+		}
 	}
 }

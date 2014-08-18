@@ -88,13 +88,13 @@ namespace Dota_Toolbox.Pages.Tools
 				if (input[x].Value == "")
 				{
 					AddParentKey(parentKeys[parentKeys.Count - 1], input[x]);
-					valueKeysList.Add(input[x]);
+					parentKeysList.Add(input[x]);
 					DoHierarchy(input[x].children);
 				}
 				else
 				{
 					AddValueKey(parentKeys[parentKeys.Count - 1], input[x]);
-					parentKeysList.Add(input[x]);
+					valueKeysList.Add(input[x]);
 				}
 			}
 		}
@@ -106,13 +106,13 @@ namespace Dota_Toolbox.Pages.Tools
 				if (input[x].Value == "")
 				{
 					AddParentKey(parentKeys[parentKeys.Count - 1], input[x]);
-					valueKeysList.Add(input[x]);
+					parentKeysList.Add(input[x]);
 					DoHierarchy(input[x].children);
 				}
 				else
 				{
 					AddValueKey(parentKeys[parentKeys.Count - 1], input[x]);
-					parentKeysList.Add(input[x]);
+					valueKeysList.Add(input[x]);
 				}
 			}
 		}
@@ -261,65 +261,54 @@ namespace Dota_Toolbox.Pages.Tools
 			parentKeys.Add(treeRootItem);
 			herolist_treeview.Items.Add(treeRootItem);
 
-			parentKeys.Add(treeRootItem);
+			//parentKeysList.Add(kv_list[0].Parent);
 			DoHierarchy(kv_list);
 		}
 
 		#endregion UI Events
 
+		private string Write(List<KeyValue> parent)
+		{
+			string o = "";
+			for (int i = 0; i < parent.Count; i++)
+			{
+				parent[i].TabIndex = parent[i].Parent.TabIndex + 1;
+
+				for (int a = 0; a < parent[i].TabIndex; a++)
+					o += "\t";
+				o += "\"" + parent[i].Key + "\"";
+				if (parent[i].Value != "")
+				{
+					o += "\t\"" + parent[i].Value + "\"\r\n";
+				}
+				else
+				{
+					o += "\r\n";
+					for (int a = 0; a < parent[i].TabIndex; a++)
+						o += "\t";
+					o += "{";
+					o += "\r\n";
+					o += Write(parent[i].children);
+					for (int a = 0; a < parent[i].TabIndex; a++)
+						o += "\t";
+					o += "}\r\n";
+				}
+			}
+			return o;
+		}
+
 		private void Save(object sender, RoutedEventArgs e)
 		{
-			/*string root = "\"CustomHeroList\"";
-			string tab = "\t";
-			string start = "\r\n{\r\n" + tab;
-			string end = "\r\n}";
-			string children = "";
-			for (int i = 0; i < 5; i++)
-			{
-				children += AddChild(i.ToString()) + start + end;
-			}
-			string text = root + start + children + end;*/
-
-			/*TextChild sub1 = new TextChild("\"sub1\"", "\"sub1 Value\"");
-			TextChild sub2 = new TextChild("\"sub2\"", "\"sub2 Value\"");
-			TextChild root = new TextChild("\"NameRoot\"");
-			TextChild root2 = new TextChild("\"NameRoot2\"");
-			root.AddChild(sub1);
-			root2.AddChild(sub2);
-			root.AddChild(root2);*/
-
-			/*string text = "";
-
-			//text = root.GetText();
-
-			if (File.Exists(ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\testing3.txt"))
-			{
-				File.WriteAllText(ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\testing3.txt", text);
-			}*/
-
-
-			/*string root = "\"" + tempList[0].Parent.Key + "\"";
+			string root = "";
+			root = "\"" + parentKeysList[0].Parent.Key + "\"";
 			root += "\r\n{\r\n";
-			for (int i = 0; i < herolist_list.Count; i++)
-			{
-				//for (int i = 0; i < tempList[i].Parent)
-				root += "\t";
-				root += "\"" + herolist_list[i].name + "\"" + "\"" + herolist_list[i].enable + "\"";
-				root += "\r\n";
-			}
+			root += Write(parentKeysList[0].Parent.children);
 			root += "}";
 
-			string text = "";
-			text = root;
-
 			if (File.Exists(ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\testing3.txt"))
 			{
-				File.WriteAllText(ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\testing3.txt", text);
-			}*/
-
-			//Console.WriteLine(doc.testText.Length);
-
-			if (!File.Exists(herolistPath)) { File.Create(herolistPath); }
+				File.WriteAllText(ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\testing3.txt", root);
+			}
 		}
 
 		private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

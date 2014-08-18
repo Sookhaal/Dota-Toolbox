@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Navigation;
 
 namespace Dota_Toolbox.Pages.Tools
 {
@@ -36,33 +37,14 @@ namespace Dota_Toolbox.Pages.Tools
 		{
 			this.DataContext = this;
 			InitializeComponent();
-
-			//herolistPath = ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file;
-
-			//UpdateHeroList();
 			treeRootItem = new TreeViewItem();
 			treeRootItem.IsExpanded = true;
 			docks = new List<DockPanel>();
-			/*//while (kv_list.GetEnumerator().MoveNext())
-			treeRootItem.Header = "CustomHeroList";
-			treeRootItem.Items.Clear();
-			parentKeys.Clear();
-			valueKeys.Clear();
-			docks.Clear();
-			herolist_treeview.Items.Clear();
-			parentKeys.Add(treeRootItem);
-			herolist_treeview.Items.Add(treeRootItem);
-
-			parentKeys.Add(treeRootItem);
-			DoHierarchy(kv_list);*/
 		}
 
 		private void OpenAddHeroWindow()
 		{
-			try
-			{
-				addHeroWindow.Show();
-			}
+			try { addHeroWindow.Show(); }
 			catch
 			{
 				addHeroWindow = new AddHeroWindow();
@@ -263,16 +245,12 @@ namespace Dota_Toolbox.Pages.Tools
 
 		private void WindowLoaded(object sender, RoutedEventArgs e)
 		{
-			/*treeRootItem.Header = herolist_list[0].Parent.Key;
-			UpdateHeroList();
-			UpdateTreeView();
-			selectedHeroName = "";*/
-
-
-
-			/*if (herolist_list.Count > 0)
-				removeHeroButton.Content = "Remove " + herolist_list[herolist_list.Count - 1].key;*/
-			herolistPath = ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file;
+			if (Directory.Exists(ApplicationSettings.instance.currentModPath))
+				herolistPath = ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file;
+			else
+			{
+				Console.WriteLine("");
+			}
 			UpdateHeroList();
 			treeRootItem.Header = "CustomHeroList";
 			treeRootItem.Items.Clear();
@@ -288,15 +266,6 @@ namespace Dota_Toolbox.Pages.Tools
 		}
 
 		#endregion UI Events
-
-		/*private string ProperHeroName(string rawHeroName)
-		{
-			string s;
-			s = rawHeroName.Substring(14).Trim();									//Remove "npc_dota_hero_"
-			s = Regex.Replace(s, "_", " ", RegexOptions.None);
-			s = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(s);		//from "legion commander" to "Legion Commander"
-			return s;
-		}*/
 
 		private void Save(object sender, RoutedEventArgs e)
 		{
@@ -349,6 +318,8 @@ namespace Dota_Toolbox.Pages.Tools
 			}*/
 
 			//Console.WriteLine(doc.testText.Length);
+
+			if (!File.Exists(herolistPath)) { File.Create(herolistPath); }
 		}
 
 		private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

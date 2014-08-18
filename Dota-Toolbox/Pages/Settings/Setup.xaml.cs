@@ -42,14 +42,7 @@ namespace Dota_Toolbox.Pages.Settings
 				}
 				catch
 				{
-					ErrorDialog errorDialog = new ErrorDialog(true, false);
-					errorDialog.AddHeader("Invalid Path");
-					errorDialog.AddTextBlock("Dota 2 path is invalid.\r\nPlease browse to a correct path.");
-					errorDialog.ShowDialog();
-					if ((bool)dotaFolderBrowser.ShowDialog(MainWindow.GetWindow(this)))
-					{
-						UpdateDotaPath(dotaFolderBrowser.SelectedPath);
-					}
+					InvalidDotaPath();
 				}
 				for (int i = 0; i < modsList.Length; i++)
 				{
@@ -66,6 +59,22 @@ namespace Dota_Toolbox.Pages.Settings
 				Console.WriteLine(e.ToString());
 			}
 			//modslist_combobox.Items.Add
+		}
+
+		private void InvalidDotaPath()
+		{
+			ErrorDialog errorDialog = new ErrorDialog(true, false);
+			errorDialog.AddHeader("Invalid Path");
+			errorDialog.AddTextBlock("Dota 2 path is invalid.\r\nPlease browse to a correct path.");
+			errorDialog.ShowDialog();
+			if ((bool)dotaFolderBrowser.ShowDialog(MainWindow.GetWindow(this)))
+			{
+				UpdateDotaPath(dotaFolderBrowser.SelectedPath);
+			}
+			else
+			{
+				InvalidDotaPath();
+			}
 		}
 
 		public static void SaveSettings()
@@ -113,7 +122,7 @@ namespace Dota_Toolbox.Pages.Settings
 
 		private void UpdateDotaPath(string newPath)
 		{
-			if (Directory.Exists(newPath))
+			if (Directory.Exists(newPath) && Directory.Exists(newPath + "\\dota_ugc\\game\\dota_addons"))
 			{
 				ApplicationSettings.instance.dotaPath = newPath;
 				dotaPathText.Text = ApplicationSettings.instance.dotaPath;
@@ -122,6 +131,7 @@ namespace Dota_Toolbox.Pages.Settings
 			}
 			else if (dotaPath == null || dotaPathText.Text == "")
 				dotaPathText.Text = "Dota 2 Path";
+			else InvalidDotaPath();
 		}
 
 		private bool ModExists(string nameToTest)

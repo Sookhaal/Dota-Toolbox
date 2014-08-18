@@ -22,7 +22,7 @@
 
 	<mui:ModernWindow.TitleLinks>
 		<mui:Link DisplayName="index" Source="/Pages/Toolbox.xaml" />
-		<mui:Link DisplayName="settings" Source="/Pages/SettingsPage.xaml" />
+		<mui:Link x:Name="settings_button" DisplayName="settings" Source="/Pages/SettingsPage.xaml" />
 		<mui:Link DisplayName="help" Source="https://developer.valvesoftware.com/wiki/Dota_2_Workshop_Tools" />
 	</mui:ModernWindow.TitleLinks>
 </mui:ModernWindow>

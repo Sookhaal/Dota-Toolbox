@@ -29,7 +29,14 @@ namespace Dota_Toolbox.Pages
 	{
 		public Toolbox()
 		{
-			Setup.LoadSettings();
+			try
+			{
+				Setup.LoadSettings();
+			}
+			catch
+			{
+				Trace.TraceError("ERROR");
+			}
 			InitializeComponent();
 			if (ApplicationSettings.instance.accentColor.A == 0)
 			{

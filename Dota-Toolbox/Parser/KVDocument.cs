@@ -1,22 +1,24 @@
 ﻿using KVLib;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace Dota_Toolbox.Parser
 {
 	internal class KVDocument
 	{
-		private List<KeyValue> tempList = new List<KeyValue>();
-		private string text;
+		public KeyValue[] testText;
+		private ObservableCollection<KeyValue> tempList = new ObservableCollection<KeyValue>();
+		private string a, b;
 
-		public List<KeyValue> ReadKeyValuesFromFile(string path)
+		public ObservableCollection<KeyValue> ReadKeyValuesFromFile(string path)
 		{
-			text = "";
+			a = "";
 			if (!File.Exists(path))
 				return tempList;
-			text = File.ReadAllText(path);
-			KeyValue kv = KVParser.ParseKeyValueText(text);
-			foreach (var data in GetChildren(kv))
+			a = File.ReadAllText(path);
+			KeyValue kv = KVParser.ParseKeyValueText(a);
+			foreach (KeyValue data in GetChildren(kv))
 				tempList.Add((KeyValue)data);
 			return tempList;
 		}

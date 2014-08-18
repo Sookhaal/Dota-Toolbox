@@ -5,6 +5,7 @@ using KVLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,100 +18,47 @@ namespace Dota_Toolbox.Pages.Tools
 	/// </summary>
 	public partial class HerolistEditor : UserControl
 	{
-		public static ObservableCollection<DotaData.Hero> herolist_list = new ObservableCollection<DotaData.Hero>();
-		private List<DotaData.Hero> selection = new List<DotaData.Hero>();
-		private List<KeyValue> tempList = new List<KeyValue>();
+		public static ObservableCollection<KeyValue> kv_list = new ObservableCollection<KeyValue>();
 		private string herolistPath, selectedHeroName, file = "testing.txt";
 		private KVDocument doc = new KVDocument();
 		private List<DockPanel> docks;
-		private TreeViewItem treeItem;
-		private Binding nameBinding, enableBinding;
+		private TreeViewItem treeRootItem;
+		private Binding keyBinding, valueBinding;
 		private AddHeroWindow addHeroWindow;
-		private DotaData.Hero newHero;
+		private KeyValue newHero;
+
+		private List<KeyValue> parentKeysList = new List<KeyValue>();
+		private List<KeyValue> valueKeysList = new List<KeyValue>();
+		private List<TreeViewItem> parentKeys = new List<TreeViewItem>();
+		private List<TreeViewItem> valueKeys = new List<TreeViewItem>();
 
 		public HerolistEditor()
 		{
 			this.DataContext = this;
 			InitializeComponent();
 
-			UpdateHeroList();
-			treeItem = new TreeViewItem();
-			treeItem.IsExpanded = true;
+			//herolistPath = ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file;
+
+			//UpdateHeroList();
+			treeRootItem = new TreeViewItem();
+			treeRootItem.IsExpanded = true;
 			docks = new List<DockPanel>();
-		}
-
-		private void UpdateHeroList()
-		{
-			herolist_list.Clear();
-			tempList.Clear();
-			herolist_treeview.Items.Clear();
-			herolistPath = ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file;
-			tempList = doc.ReadKeyValuesFromFile(herolistPath);
-			for (int i = 0; i < tempList.Count; i++)
-			{
-				var d = new DotaData.Hero { name = tempList[i].Key, enable = tempList[i].GetBool() };
-				herolist_list.Add(d);
-			}
-			ToggleRemoveButton();
-		}
-
-		private void WindowLoaded(object sender, RoutedEventArgs e)
-		{
-			treeItem.Header = tempList[0].Parent.Key;
-			UpdateHeroList();
-			UpdateTreeView();
-			selectedHeroName = "";
-			if (herolist_list.Count > 0)
-				removeHeroButton.Content = "Remove " + herolist_list[herolist_list.Count - 1].name;
-		}
-
-		private void UpdateTreeView()
-		{
-			treeItem.Items.Clear();
+			/*//while (kv_list.GetEnumerator().MoveNext())
+			treeRootItem.Header = "CustomHeroList";
+			treeRootItem.Items.Clear();
+			parentKeys.Clear();
+			valueKeys.Clear();
 			docks.Clear();
 			herolist_treeview.Items.Clear();
-			for (int i = 0; i < herolist_list.Count; i++)
-			{
-				docks.Add(new DockPanel());
+			parentKeys.Add(treeRootItem);
+			herolist_treeview.Items.Add(treeRootItem);
 
-				nameBinding = new Binding();
-				nameBinding.Path = new PropertyPath("name");
-				nameBinding.Source = herolist_list[i];
-				nameBinding.Mode = BindingMode.TwoWay;
-
-				enableBinding = new Binding();
-				enableBinding.Path = new PropertyPath("enable");
-				enableBinding.Source = herolist_list[i];
-				enableBinding.Mode = BindingMode.TwoWay;
-
-				TextBox heroNameEditable = new TextBox();
-				heroNameEditable.SetBinding(TextBox.TextProperty, nameBinding);
-				CheckBox heroEnabled = new CheckBox();
-				heroEnabled.SetBinding(CheckBox.IsCheckedProperty, enableBinding);
-				heroEnabled.Margin = new Thickness(0, 0, 0, 0);
-				docks[i].Children.Add(heroEnabled);
-				docks[i].Children.Add(heroNameEditable);
-				docks[i].PreviewMouseLeftButtonDown += new MouseButtonEventHandler(HeroClick);
-				docks[i].MinWidth = 175;
-
-				treeItem.Items.Add(new TreeViewItem() { Header = docks[i] });
-			}
-			herolist_treeview.Items.Add(treeItem);
-		}
-
-		public void AddHero(string name)
-		{
-			newHero = new DotaData.Hero { name = name, enable = true };
-			herolist_list.Add(newHero);
-			UpdateTreeView();
-			ToggleRemoveButton();
+			parentKeys.Add(treeRootItem);
+			DoHierarchy(kv_list);*/
 		}
 
 		private void OpenAddHeroWindow()
 		{
-			/*MessageBoxButton btn = MessageBoxButton.OK;
-			ModernDialog.ShowMessage("", "", btn);*/
-
 			try
 			{
 				addHeroWindow.Show();
@@ -122,51 +70,158 @@ namespace Dota_Toolbox.Pages.Tools
 				addHeroWindow.Show();
 			}
 
-			/*ModernWindow w = new Dota_Toolbox.Windows.BlankWindow();
-			w.Show();*/
+		}
 
-			//string t = addHeroDialog.MessageBoxResult.ToString();
-			//Console.WriteLine(t);
-			/*if (addHeroDialog.MessageBoxResult.ToString() == "OK")
+		private void UpdateHeroList()
+		{
+			kv_list.Clear();
+			herolist_treeview.Items.Clear();
+			kv_list = doc.ReadKeyValuesFromFile(herolistPath);
+			/*for (int i = 0; i < tempList.Count; i++)
 			{
-				var d = new DotaData.Hero { name = "Added 1", enable = true };
+				var d = new KeyValue(tempList[i].Key, tempList[i].Value);
+				//d.AddChild()
 				herolist_list.Add(d);
 			}*/
-			//UpdateTreeView();
-			//ToggleRemoveButton();
+			//doc.GetChildren()
+			ToggleRemoveButton();
+		}
+
+		private void UpdateTreeView()
+		{
+			treeRootItem.Items.Clear();
+			parentKeys.Clear();
+			valueKeys.Clear();
+			parentKeys.Add(treeRootItem);
+			docks.Clear();
+			herolist_treeview.Items.Clear();
+			herolist_treeview.Items.Add(treeRootItem);
+			DoHierarchy(kv_list);
+		}
+
+		private void DoHierarchy(List<KeyValue> input)
+		{
+			for (int x = 0; x < input.Count; x++)
+			{
+				if (input[x].Value == "")
+				{
+					AddParentKey(parentKeys[parentKeys.Count - 1], input[x]);
+					valueKeysList.Add(input[x]);
+					DoHierarchy(input[x].children);
+				}
+				else
+				{
+					AddValueKey(parentKeys[parentKeys.Count - 1], input[x]);
+					parentKeysList.Add(input[x]);
+				}
+			}
+		}
+
+		private void DoHierarchy(ObservableCollection<KeyValue> input)
+		{
+			for (int x = 0; x < input.Count; x++)
+			{
+				if (input[x].Value == "")
+				{
+					AddParentKey(parentKeys[parentKeys.Count - 1], input[x]);
+					valueKeysList.Add(input[x]);
+					DoHierarchy(input[x].children);
+				}
+				else
+				{
+					AddValueKey(parentKeys[parentKeys.Count - 1], input[x]);
+					parentKeysList.Add(input[x]);
+				}
+			}
+		}
+
+		private void AddValueKey(TreeViewItem parent, KeyValue keyValue)
+		{
+			TreeViewItem t = new TreeViewItem();
+			DockPanel dockPanel = new DockPanel();
+			keyBinding = new Binding();
+			keyBinding.Path = new PropertyPath("Key");
+			keyBinding.Source = keyValue;
+			keyBinding.Mode = BindingMode.TwoWay;
+
+			valueBinding = new Binding();
+			valueBinding.Path = new PropertyPath("Value");
+			valueBinding.Source = keyValue;
+			valueBinding.Mode = BindingMode.TwoWay;
+
+			TextBox keyText = new TextBox();
+			keyText.SetBinding(TextBox.TextProperty, keyBinding);
+			keyText.Width = 200;
+			TextBox valueText = new TextBox();
+			valueText.SetBinding(TextBox.TextProperty, valueBinding);
+
+			dockPanel.Children.Add(keyText);
+			dockPanel.Children.Add(valueText);
+			dockPanel.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(HeroClick);
+			t.Header = dockPanel;
+
+			valueKeys.Add(t);
+			parent.Items.Add(valueKeys[valueKeys.Count - 1]);									//Does it work?
+		}
+
+		private void AddParentKey(TreeViewItem parent, KeyValue keyValue)
+		{
+			TreeViewItem t = new TreeViewItem();
+
+			keyBinding = new Binding();
+			keyBinding.Path = new PropertyPath("Key");
+			keyBinding.Source = keyValue;
+			keyBinding.Mode = BindingMode.TwoWay;
+
+			TextBox keyText = new TextBox();
+			keyText.SetBinding(TextBox.TextProperty, keyBinding);
+			Button keyButton = new Button();
+			keyButton.SetBinding(Button.ContentProperty, keyBinding);
+
+			DockPanel dockPanel = new DockPanel();
+			dockPanel.Children.Add(keyText);
+			dockPanel.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(HeroClick);
+			t.Header = dockPanel;
+
+			parentKeys.Add(t);
+			parent.Items.Add(parentKeys[parentKeys.Count - 1]);								//Does it work?
+		}
+
+		public void AddHero(string name)
+		{
+			newHero = new KeyValue(name, "1");
+			kv_list.Add(newHero);
+			AddValueKey(treeRootItem, newHero);
+			ToggleRemoveButton();
 		}
 
 		private void RemoveHero()
 		{
-			int index;
-			for (index = 0; index < herolist_list.Count; index++)
+			for (int i = 0; i < kv_list.Count; i++)
 			{
-				if (String.Equals(selectedHeroName, herolist_list[index].name))
+				if (String.Equals(selectedHeroName, kv_list[i].Key))
 				{
-					herolist_list.RemoveAt(index);
+					kv_list.RemoveAt(i);
 					UpdateTreeView();
 					ToggleRemoveButton();
 					return;
 				}
 			}
-			if (index == herolist_list.Count)
-			{
-				herolist_list.RemoveAt(index - 1);
-			}
+			kv_list.RemoveAt(kv_list.Count - 1);
 			ToggleRemoveButton();
 			UpdateTreeView();
 		}
 
 		private void ToggleRemoveButton()
 		{
-			if (herolist_list.Count <= 0)
+			if (kv_list.Count <= 0)
 			{
 				removeHeroButton.Content = "Nothing To Remove";
 				removeHeroButton.IsEnabled = false;
 			}
-			else if (herolist_list.Count > 0)
+			else if (kv_list.Count > 0)
 			{
-				removeHeroButton.Content = "Remove " + herolist_list[herolist_list.Count - 1].name;
+				removeHeroButton.Content = "Remove " + kv_list[kv_list.Count - 1].Key;
 				removeHeroButton.IsEnabled = true;
 			}
 		}
@@ -199,11 +254,37 @@ namespace Dota_Toolbox.Pages.Tools
 		private void HeroClick(object sender, MouseButtonEventArgs e)
 		{
 			tempStackpanel = sender as DockPanel;
-			tempTextbox = tempStackpanel.Children[1] as TextBox;
+			tempTextbox = tempStackpanel.Children[0] as TextBox;
 			selectedHeroName = tempTextbox.Text;
 			removeHeroButton.Content = "Remove " + selectedHeroName;
 			if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
 				RemoveHero();
+		}
+
+		private void WindowLoaded(object sender, RoutedEventArgs e)
+		{
+			/*treeRootItem.Header = herolist_list[0].Parent.Key;
+			UpdateHeroList();
+			UpdateTreeView();
+			selectedHeroName = "";*/
+
+
+
+			/*if (herolist_list.Count > 0)
+				removeHeroButton.Content = "Remove " + herolist_list[herolist_list.Count - 1].key;*/
+			herolistPath = ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file;
+			UpdateHeroList();
+			treeRootItem.Header = "CustomHeroList";
+			treeRootItem.Items.Clear();
+			parentKeys.Clear();
+			valueKeys.Clear();
+			docks.Clear();
+			herolist_treeview.Items.Clear();
+			parentKeys.Add(treeRootItem);
+			herolist_treeview.Items.Add(treeRootItem);
+
+			parentKeys.Add(treeRootItem);
+			DoHierarchy(kv_list);
 		}
 
 		#endregion UI Events
@@ -247,8 +328,27 @@ namespace Dota_Toolbox.Pages.Tools
 				File.WriteAllText(ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\testing3.txt", text);
 			}*/
 
-			Console.WriteLine(herolist_list[0].name);
-			Console.WriteLine(herolist_list[0].enable);
+
+			/*string root = "\"" + tempList[0].Parent.Key + "\"";
+			root += "\r\n{\r\n";
+			for (int i = 0; i < herolist_list.Count; i++)
+			{
+				//for (int i = 0; i < tempList[i].Parent)
+				root += "\t";
+				root += "\"" + herolist_list[i].name + "\"" + "\"" + herolist_list[i].enable + "\"";
+				root += "\r\n";
+			}
+			root += "}";
+
+			string text = "";
+			text = root;
+
+			if (File.Exists(ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\testing3.txt"))
+			{
+				File.WriteAllText(ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\testing3.txt", text);
+			}*/
+
+			//Console.WriteLine(doc.testText.Length);
 		}
 
 		private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

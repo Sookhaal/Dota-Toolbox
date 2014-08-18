@@ -171,6 +171,7 @@ namespace Dota_Toolbox.Pages.Settings
 
 					AppearanceManager.Current.AccentColor = value;
 					ApplicationSettings.instance.accentColor = value;
+					Console.WriteLine(value);
 					Setup.SaveSettings();
 				}
 			}

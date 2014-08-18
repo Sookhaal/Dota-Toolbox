@@ -17,6 +17,8 @@ using System.Xml.Serialization;
 using System.IO;
 using Dota_Toolbox.Pages.Settings;
 using FirstFloor.ModernUI.Presentation;
+using Dota_Toolbox.Windows;
+using System.Diagnostics;
 
 namespace Dota_Toolbox.Pages
 {
@@ -25,17 +27,19 @@ namespace Dota_Toolbox.Pages
 	/// </summary>
 	public partial class Toolbox : UserControl
 	{
-		//ApplicationSettings s = new ApplicationSettings();
 		public Toolbox()
 		{
 			Setup.LoadSettings();
 			InitializeComponent();
+			if (ApplicationSettings.instance.accentColor.A == 0)
+			{
+				ApplicationSettings.instance.accentColor = Color.FromArgb(255, ApplicationSettings.instance.accentColor.R, ApplicationSettings.instance.accentColor.G, ApplicationSettings.instance.accentColor.B);
+				Setup.SaveSettings();
+			}
 			AppearanceManager.Current.AccentColor = ApplicationSettings.instance.accentColor;
-			AppearanceManager.Current.ThemeSource = new Uri(ApplicationSettings.instance.theme, UriKind.Relative);
-		}
 
-		private void TestingMethods(object sender, RoutedEventArgs e)
-		{
+			try { AppearanceManager.Current.ThemeSource = new Uri(ApplicationSettings.instance.theme, UriKind.Relative); }
+			catch { Trace.TraceWarning("Theme setting not found. Using default Theme:" + AppearanceManager.Current.ThemeSource); }
 		}
 	}
 }

@@ -61,6 +61,7 @@ namespace Dota_Toolbox.Pages.Tools
 			{
 				Header = stacks[4]
 			});
+			treeItem.Items.Add(new TreeView());
 
 			//treeView.
 			treeView.Items.Add(treeItem);

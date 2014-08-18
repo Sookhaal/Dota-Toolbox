@@ -25,9 +25,17 @@ namespace Dota_Toolbox.Windows
 		public ErrorDialog()
 		{
 			InitializeComponent();
-
-			// define the dialog buttons
 			this.Buttons = new Button[] { this.OkButton, this.CancelButton };
+		}
+
+		public ErrorDialog(bool okButton, bool cancelButton)
+		{
+			InitializeComponent();
+			if (okButton)
+				this.Buttons = new Button[] { this.OkButton };
+			if (cancelButton)
+				this.Buttons.ToList().Add(this.CancelButton);
+			//this.Buttons = new Button[] { this.OkButton, this.CancelButton };
 		}
 
 		public void AddHeader(string text)

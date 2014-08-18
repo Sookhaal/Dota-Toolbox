@@ -1,6 +1,7 @@
 ﻿using FirstFloor.ModernUI.Windows.Controls;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace Dota_Toolbox
 	{
 		public MainWindow()
 		{
+			if (!File.Exists("Settings\\Settings.xml"))
+				File.Create("Settings\\Settings.xml");
 			InitializeComponent();
 		}
 

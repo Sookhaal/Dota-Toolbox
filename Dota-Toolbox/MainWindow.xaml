@@ -4,7 +4,8 @@
 		xmlns:mui="http://firstfloorsoftware.com/ModernUI"
 		Title="Dota 2 - Modding Toolbox" IsTitleVisible="True"
 		ContentSource="/Pages/Toolbox.xaml"
-		MinWidth="800" MinHeight="500" Closing="ApplicationClosing">
+		MinWidth="800" MinHeight="500" Width="800" Height="500"
+		Closing="ApplicationClosing">
 
 	<mui:ModernWindow.MenuLinkGroups>
 		<mui:LinkGroup DisplayName="TOOLBOX">

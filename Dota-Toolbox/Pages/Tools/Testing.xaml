@@ -9,7 +9,13 @@
 	<Grid Style="{StaticResource ContentRoot}">
 		<ScrollViewer>
 			<StackPanel MinWidth="200">
-				<TreeView x:Name="treeView" IsTextSearchEnabled="True"/>
+				<TreeView x:Name="treeView" IsTextSearchEnabled="True">
+					<TreeViewItem>
+						<TreeViewItem>
+							<Button></Button>
+						</TreeViewItem>
+					</TreeViewItem>
+				</TreeView>
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>

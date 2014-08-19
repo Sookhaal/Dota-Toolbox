@@ -166,5 +166,15 @@ namespace Dota_Toolbox.Pages.Settings
 		{
 			SaveCurrentMod();
 		}
+
+		private void PathClick(object sender, RoutedEventArgs e)
+		{
+			Utils.ExplorePath(dotaPath);
+		}
+
+		private void CurrentModClick(object sender, RoutedEventArgs e)
+		{
+			Utils.ExplorePath(ApplicationSettings.instance.currentModPath);
+		}
 	}
 }

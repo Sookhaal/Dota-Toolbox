@@ -78,6 +78,9 @@
     <Compile Include="Pages\Tools\HerolistEditor.xaml.cs">
       <DependentUpon>HerolistEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Tools\ItemEditor.xaml.cs">
+      <DependentUpon>ItemEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Tools\Testing.xaml.cs">
       <DependentUpon>Testing.xaml</DependentUpon>
     </Compile>
@@ -137,6 +140,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Tools\HerolistEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Tools\ItemEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

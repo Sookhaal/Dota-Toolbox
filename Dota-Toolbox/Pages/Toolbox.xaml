@@ -8,10 +8,11 @@
 			 d:DesignHeight="300" d:DesignWidth="200">
 	<!--<Grid Style="{StaticResource ContentRoot}">-->
 	<Grid Margin="-26,10,0,0">
-		<mui:ModernTab Layout="List" SelectedSource="/Pages/Tools/HerolistEditor.xaml">
+		<mui:ModernTab Layout="List" SelectedSource="/Pages/Tools/ItemEditor.xaml">
 			<mui:ModernTab.Links>
 				<mui:Link DisplayName="Herolist Editor" Source="/Pages/Tools/HerolistEditor.xaml"/>
-				<mui:Link DisplayName="Testing" Source="/Pages/Tools/Testing.xaml"/>
+				<mui:Link DisplayName="Item Editor" Source="/Pages/Tools/ItemEditor.xaml"/>
+				<!--<mui:Link DisplayName="Testing" Source="/Pages/Tools/Testing.xaml"/>-->
 				<!--<mui:Link DisplayName="appearance" Source="/Pages/Settings/Appearance.xaml" />-->
 				<!--<mui:Link DisplayName="about" Source="/Pages/Settings/About.xaml" />-->
 			</mui:ModernTab.Links>

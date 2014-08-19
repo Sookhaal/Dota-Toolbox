@@ -11,11 +11,11 @@
 			<StackPanel MinWidth="200">
 				<Button x:Name="settings_BrowseDotaFolder" Content="Browse Dota 2 Folder" Height="70" Click="BrowseFolder" Margin="0,0,0,4" FontSize="20" />
 				<DockPanel Margin="0 0 0 4">
-					<TextBlock Text="Path:" VerticalAlignment="Center" Margin="0 0 4 0" HorizontalAlignment="Left" />
+					<Button Content="Path:" VerticalAlignment="Center" Margin="0 0 4 0" HorizontalAlignment="Left" Click="PathClick" />
 					<TextBox x:Name="dotaPathText" Grid.Column="1" Text="Path is not set!" VerticalAlignment="Center" TextChanged="DotaPathTextUpdate" />
 				</DockPanel>
 				<DockPanel Margin="0 0 0 4">
-					<TextBlock Grid.Column="0" Text="Current mod:" VerticalAlignment="Center" Margin="0 0 4 0" HorizontalAlignment="Left" />
+					<Button Grid.Column="0" Content="Current mod:" VerticalAlignment="Center" Margin="0 0 4 0" HorizontalAlignment="Left" Click="CurrentModClick" />
 					<ComboBox x:Name="modslist_combobox" Grid.Column="1" IsEditable="True" />
 				</DockPanel>
 				<mui:BBCodeBlock x:Name="currentModFeedback" BBCode="" VerticalAlignment="Center" Margin="0 0 4 0" HorizontalAlignment="Center"/>

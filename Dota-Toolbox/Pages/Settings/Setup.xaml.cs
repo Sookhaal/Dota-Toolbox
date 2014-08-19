@@ -63,7 +63,7 @@ namespace Dota_Toolbox.Pages.Settings
 
 		private void InvalidDotaPath()
 		{
-			ErrorDialog errorDialog = new ErrorDialog(true, false);
+			PromptDialog errorDialog = new PromptDialog("Error", true, false);
 			errorDialog.AddHeader("Invalid Path");
 			errorDialog.AddTextBlock("Dota 2 path is invalid.\r\nPlease browse to a correct path.");
 			errorDialog.ShowDialog();

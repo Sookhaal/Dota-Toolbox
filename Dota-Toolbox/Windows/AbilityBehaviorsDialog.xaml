@@ -1,0 +1,19 @@
+﻿<mui:ModernDialog x:Class="Dota_Toolbox.Windows.AbilityBehaviorsDialog"
+				  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+				  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+				  xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+				  mc:Ignorable="d" 
+				  Title="Ability Behaviors"
+				  Width="450" MinWidth="450" MinHeight="200" Topmost="True">
+	<Grid>
+		<DockPanel Margin="0 0 0 4" Visibility="Collapsed">
+			<Button x:Name="x_button_base" Content="X" DockPanel.Dock="Right" Margin="4 0 0 0" Background="#FFBF1E1E" Click="RemoveBehavior_Click"/>
+			<ComboBox x:Name="behaviors_list_base"/>
+		</DockPanel>
+		<StackPanel x:Name="s">
+			<Button Content="Add Behavior" Click="AddBehavior_Click"/>
+		</StackPanel>
+	</Grid>
+</mui:ModernDialog>

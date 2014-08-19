@@ -85,14 +85,21 @@
       <DependentUpon>Testing.xaml</DependentUpon>
     </Compile>
     <Compile Include="Parser\DotaData.cs" />
+    <Compile Include="Parser\Item.cs" />
     <Compile Include="Parser\KVDocument.cs" />
     <Compile Include="Settings\ApplicationSettings.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="Windows\AbilityBehaviorsDialog.xaml.cs">
+      <DependentUpon>AbilityBehaviorsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\AddHeroWindow.xaml.cs">
       <DependentUpon>AddHeroWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ErrorDialog.xaml.cs">
-      <DependentUpon>ErrorDialog.xaml</DependentUpon>
+    <Compile Include="Windows\AddItemWindow.xaml.cs">
+      <DependentUpon>AddItemWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\PromptDialog.xaml.cs">
+      <DependentUpon>PromptDialog.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -151,11 +158,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\AbilityBehaviorsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\AddHeroWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\ErrorDialog.xaml">
+    <Page Include="Windows\AddItemWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\PromptDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -167,7 +182,13 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\DefaultAbilityBehavior.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\DefaultHeroesList.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\DefaultItemQuality.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\README.txt">

@@ -18,24 +18,25 @@ using System.Windows.Shapes;
 namespace Dota_Toolbox.Windows
 {
 	/// <summary>
-	/// Interaction logic for ErrorDialog.xaml
+	/// Interaction logic for PromptDialog.xaml
 	/// </summary>
-	public partial class ErrorDialog : ModernDialog
+	public partial class PromptDialog : ModernDialog
 	{
-		public ErrorDialog()
+		public PromptDialog(string title)
 		{
 			InitializeComponent();
+			this.Title = title;
 			this.Buttons = new Button[] { this.OkButton, this.CancelButton };
 		}
 
-		public ErrorDialog(bool okButton, bool cancelButton)
+		public PromptDialog(string title, bool okButton, bool cancelButton)
 		{
 			InitializeComponent();
 			if (okButton)
 				this.Buttons = new Button[] { this.OkButton };
 			if (cancelButton)
 				this.Buttons.ToList().Add(this.CancelButton);
-			//this.Buttons = new Button[] { this.OkButton, this.CancelButton };
+			this.Title = title;
 		}
 
 		public void AddHeader(string text)
@@ -92,6 +93,16 @@ namespace Dota_Toolbox.Windows
 		{
 			b.Margin = new Thickness(0, 0, 0, 4);
 			s.Children.Add(b);
+		}
+
+		public void AddCombobox(string[] items)
+		{
+			ComboBox c = new ComboBox();
+			if (items.Length > 0)
+				for (int i = 0; i < items.Length; i++)
+					c.Items.Add(items[i]);
+			c.Margin = new Thickness(0, 0, 0, 4);
+			s.Children.Add(c);
 		}
 	}
 }

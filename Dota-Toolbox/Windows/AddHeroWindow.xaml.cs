@@ -18,7 +18,7 @@ namespace Dota_Toolbox.Windows
 		public static string newHero = "";
 		public HerolistEditor parentWindow;
 		private string[] heroesListLines;
-		private ErrorDialog errorDialog;
+		private PromptDialog errorDialog;
 
 		/// <summary>
 		/// Initialization.
@@ -35,7 +35,7 @@ namespace Dota_Toolbox.Windows
 				b.Content = "DefaultHeroesList.txt";
 				b.Click += ErrorButtonClicked;
 
-				errorDialog = new ErrorDialog();
+				errorDialog = new PromptDialog("Error");
 				errorDialog.AddColoredHeader("File Not Found");
 				errorDialog.AddButton(b);
 				errorDialog.AddBBCode("An empty file will be created. Feel free to edit it.");

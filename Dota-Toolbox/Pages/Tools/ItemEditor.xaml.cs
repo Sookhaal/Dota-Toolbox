@@ -1,5 +1,6 @@
 ﻿using Dota_Toolbox.Parser;
 using Dota_Toolbox.Settings;
+using Dota_Toolbox.Windows;
 using KVLib;
 using System;
 using System.Collections.Generic;
@@ -31,8 +32,9 @@ namespace Dota_Toolbox.Pages.Tools
 		private List<DockPanel> docks;
 		private TreeViewItem treeRootItem;
 		private Binding keyBinding, valueBinding;
-		//private AddItemWindow addKVWindow;
+		private AddItemWindow addItemWindow;
 		private KeyValue newKV, root;
+		private Item tempItem;
 
 		private List<KeyValue> parentKeysList = new List<KeyValue>();
 		private List<KeyValue> valueKeysList = new List<KeyValue>();
@@ -48,16 +50,28 @@ namespace Dota_Toolbox.Pages.Tools
 			docks = new List<DockPanel>();
 		}
 		#region Methods
-		/*private void OpenAddHeroWindow()
+		private void OpenAddItemWindow()
 		{
-			try { addKVWindow.Show(); }
+			OpenAddItemWindow(null);
+		}
+
+		private void OpenAddItemWindow(string itemName)
+		{
+			try
+			{
+				for (int i = 0; i < parentKeysList.Count; i++)
+					if (String.Equals(itemName, root.children[i].Key))
+						tempItem = new Item(root.children[i]);
+				addItemWindow.a = tempItem;
+				addItemWindow.Title = "Edit Item";
+				addItemWindow.Show();
+			}
 			catch
 			{
-				addKVWindow = new AddHeroWindow();
-				addKVWindow.parentWindow = this;
-				addKVWindow.Show();
+				addItemWindow = new AddItemWindow();
+				OpenAddItemWindow(itemName);
 			}
-		}*/
+		}
 
 		private void ToggleRemoveButton()
 		{
@@ -88,7 +102,7 @@ namespace Dota_Toolbox.Pages.Tools
 			ToggleRemoveButton();
 		}
 
-		private void DoHierarchy(List<KeyValue> input)
+		/*private void DoHierarchy(List<KeyValue> input)
 		{
 			for (int x = 0; x < input.Count; x++)
 			{
@@ -100,11 +114,11 @@ namespace Dota_Toolbox.Pages.Tools
 				}
 				else
 				{
-					/*AddValue(parentKeys[parentKeys.Count - 1], input[x]);
-					valueKeysList.Add(input[x]);*/
+					AddValue(parentKeys[parentKeys.Count - 1], input[x]);
+					valueKeysList.Add(input[x]);
 				}
 			}
-		}
+		}*/
 
 		private void DoRootHierarchy(ObservableCollection<KeyValue> input)
 		{
@@ -114,10 +128,10 @@ namespace Dota_Toolbox.Pages.Tools
 				{
 					AddParentKey(parentKeys[0], input[x]);
 					parentKeysList.Add(input[x]);
-					if (input[x].children != null)
+					/*if (input[x].children != null)
 						DoHierarchy(input[x].children);
 					else
-						input[x].children = new List<KeyValue>();
+						input[x].children = new List<KeyValue>();*/
 				}
 				else
 				{
@@ -185,7 +199,7 @@ namespace Dota_Toolbox.Pages.Tools
 		#region UI Events
 		private void AddItem_Click(object sender, RoutedEventArgs e)
 		{
-			Console.WriteLine(parentKeysList.Count);
+			//Console.WriteLine(root.children[0].children.Count);
 		}
 
 		private void RemoveItem_Click(object sender, RoutedEventArgs e)
@@ -222,10 +236,14 @@ namespace Dota_Toolbox.Pages.Tools
 			e.Handled = true;
 		}
 
-		private DockPanel tempStackpanel;
-		private TextBox tempTextbox;
+		private DockPanel tempPanel;
+		private Button tempButton;
 		private void Item_Click(object sender, MouseButtonEventArgs e)
 		{
+			//Console.WriteLine(parentKeysList.Count);
+			tempPanel = sender as DockPanel;
+			tempButton = tempPanel.Children[0] as Button;
+			OpenAddItemWindow(tempButton.Content.ToString());
 			/*tempStackpanel = sender as DockPanel;
 			tempTextbox = tempStackpanel.Children[0] as TextBox;
 			selectedKey = tempTextbox.Text;

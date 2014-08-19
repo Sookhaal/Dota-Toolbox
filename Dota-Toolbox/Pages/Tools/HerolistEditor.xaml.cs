@@ -51,7 +51,7 @@ namespace Dota_Toolbox.Pages.Tools
 			{
 				addKVWindow = new AddHeroWindow();
 				addKVWindow.parentWindow = this;
-				addKVWindow.Show();
+				OpenAddHeroWindow();
 			}
 
 		}
@@ -219,7 +219,6 @@ namespace Dota_Toolbox.Pages.Tools
 			root.RemoveChild(kv_list[kv_list.Count - 1]);
 			ToggleRemoveButton();
 			UpdateTreeView();
-			Console.WriteLine(root.children.Count);
 			SaveToFile();
 		}
 		#endregion

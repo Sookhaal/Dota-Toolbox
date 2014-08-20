@@ -1,5 +1,5 @@
-﻿component
-consumable
+﻿consumable
+component
 common
 rare
 epic

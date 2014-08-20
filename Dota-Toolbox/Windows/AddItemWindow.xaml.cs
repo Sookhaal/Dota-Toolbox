@@ -27,8 +27,8 @@ namespace Dota_Toolbox.Windows
 		public Item a;
 		private PromptDialog errorDialog;
 		private AbilityBehaviorsDialog abilityBehaviorsDialog;
+		private ItemShopTagsDialog itemShopTagsDialog;
 		private string[] currentLines;
-		private string tempText;
 
 		public AddItemWindow()
 		{
@@ -37,49 +37,102 @@ namespace Dota_Toolbox.Windows
 
 		private void WindowLoaded(object sender, RoutedEventArgs e)
 		{
-			if (a.name != "" && a.name != null)
-				name.Text = a.name;
-			if (a.id >= 0)
-				id.Text = a.id.ToString();
-			/*if (a.abilityBehavior != "" && a.abilityBehavior != null)
-				abilityBehaviorsDialog.abilityBehavior_list.Add();*/
-			/*Console.WriteLine(a.abilityBehavior.Length);
-			for (int i = 0; i < a.abilityBehavior.Length; i++)
-				Console.WriteLine(a.abilityBehavior[i]);*/
+			name.Text = a.name;
+			id.Text = a.id.ToString();
 
-			/*if (a.abilityBehavior != "" && a.abilityBehavior != null)
-				abilityBehavior.Text = a.abilityBehavior;
-			if (a.abilityUnitTargetType != "" && a.abilityUnitTargetType != null)
-				abilityUnitTargetType.Text = a.abilityUnitTargetType;*/
+			/*abilityBehavior*/
+			ParseDataToCombobox("DefaultAbilityUnitTargetTeam.txt", abilityUnitTargetTeam, "http://pastebin.com/raw.php?i=rMdBZKAT");
+			abilityUnitTargetTeam.SelectedItem = a.abilityUnitTargetTeam;
+			/*abilityUnitTargetType*/
+			model.Text = a.model;
+			baseClass.Text = a.baseClass;
+			abilityTextureName.Text = a.abilityTextureName;
+			itemKillable.IsChecked = a.itemKillable;
+
+			abilityCastRange.Text = a.abilityCastRange.ToString();
+			abilityCastPoint.Text = a.abilityCastPoint.ToString();
+
+			itemCost.Text = a.itemCost.ToString();
+			//itemShopTags
+			ParseDataToCombobox("DefaultItemQuality.txt", itemQuality, "http://pastebin.com/raw.php?i=n6kxbGZm");
+			itemQuality.SelectedItem = a.itemQuality;
+			itemStackable.IsChecked = a.itemStackable;
+			ParseDataToCombobox("DefaultItemShareability.txt", itemShareability, "http://pastebin.com/raw.php?i=n3ussZgT");
+			itemShareability.SelectedItem = a.itemShareability;
+			itemPermanent.IsChecked = a.itemPermanent;
+			itemInitialCharges.Text = a.itemInitialCharges.ToString();
+			sideShop.IsChecked = a.sideShop;
 		}
 
-		private void CreateBehaviorsDialog()
+
+		//Could use ParseDataToList directly. . .
+		private void ParseDataToCombobox(string file, ComboBox comboBox, string link)
 		{
 			try
 			{
-				currentLines = File.ReadAllLines("Data\\DefaultAbilityBehavior.txt");
+				currentLines = File.ReadAllLines("Data\\" + file);
 				if (currentLines.Length > 0)
 					for (int i = 0; i < currentLines.Length; i++)
-						abilityBehaviorsDialog.behaviors_list_base.Items.Add(currentLines[i]);
+						comboBox.Items.Add(currentLines[i]);
 			}
 			catch
 			{
 				Button b = new Button();
-				b.Content = "DefaultAbilityBehavior.txt";
-				b.Click += BehaviorErrorButton_Clicked;
+				b.Content = file;
+				b.Click += FileError_Button_Clicked;
 
 				errorDialog = new PromptDialog("Error");
 				errorDialog.AddColoredHeader("File Not Found");
 				errorDialog.AddButton(b);
 				errorDialog.AddBBCode("An empty file will be created. Feel free to edit it.");
-				errorDialog.AddBBCode("[url=http://pastebin.com/raw.php?i=jqWJC05T]Default Values.[/url]");
+				errorDialog.AddBBCode("[url=" + link + "]Default Values.[/url]");
 
 				errorDialog.ShowDialog();
-				CreateBehaviorsDialog();
+				ParseDataToCombobox(file, comboBox, link);
 			}
 		}
 
-		private void BehaviorErrorButton_Clicked(object sender, RoutedEventArgs e)
+		private void ParseDataToList(string file, List<string> stringsList, string link)
+		{
+			try
+			{
+				currentLines = File.ReadAllLines("Data\\" + file);
+				if (currentLines.Length > 0)
+					for (int i = 0; i < currentLines.Length; i++)
+						stringsList.Add(currentLines[i]);
+			}
+			catch
+			{
+				Button b = new Button();
+				b.Content = file;
+				b.Click += FileError_Button_Clicked;
+
+				errorDialog = new PromptDialog("Error");
+				errorDialog.AddColoredHeader("File Not Found");
+				errorDialog.AddButton(b);
+				errorDialog.AddBBCode("An empty file will be created. Feel free to edit it.");
+				errorDialog.AddBBCode("[url=" + link + "]Default Values.[/url]");
+
+				errorDialog.ShowDialog();
+				ParseDataToList(file, stringsList, link);
+			}
+		}
+
+		#region UI Init
+		private void CreateBehaviorsDialog()
+		{
+			try { ParseDataToCombobox("DefaultAbilityBehavior.txt", abilityBehaviorsDialog.behaviors_list_base, "http://pastebin.com/raw.php?i=jqWJC05T"); }
+			catch { CreateBehaviorsDialog(); }
+		}
+
+		private void CreateItemShopTagsDialog()
+		{
+			try { ParseDataToList("DefaultItemShopTags.txt", itemShopTagsDialog.itemShopTags_list_base, "http://pastebin.com/raw.php?i=VmWrBWqf"); }
+			catch { CreateItemShopTagsDialog(); }
+		}
+		#endregion
+
+		private void FileError_Button_Clicked(object sender, RoutedEventArgs e)
 		{
 			Utils.ExplorePath(ApplicationSettings.applicationPath + "\\Data");
 		}
@@ -93,15 +146,22 @@ namespace Dota_Toolbox.Windows
 			abilityBehaviorsDialog.ShowDialog();
 			if (abilityBehaviorsDialog.DialogResult == true)
 				a.abilityBehavior = abilityBehaviorsDialog.GetNewBehaviors();
-			//Console.WriteLine(a.abilityBehavior);
 		}
 
 		private void ShopTags_Click(object sender, RoutedEventArgs e)
 		{
-
+			itemShopTagsDialog = new ItemShopTagsDialog();
+			CreateItemShopTagsDialog();
+			itemShopTagsDialog.SetTags();
+			itemShopTagsDialog.ShowDialog();
 		}
 
 		private void TargetTypes_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void TargetFlags_Click(object sender, RoutedEventArgs e)
 		{
 
 		}

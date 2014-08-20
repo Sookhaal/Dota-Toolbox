@@ -38,6 +38,14 @@ namespace Dota_Toolbox.Parser
 		private int _itemInitialCharges;
 		private bool _sideShop;
 
+		//Misc
+		private int _itemStockInitial;
+		private int _itemStockMax;
+		private int _itemStockTime;
+		private bool _itemSupport;
+		private string _itemDeclaration;
+
+		#region Get/Set
 		public KeyValue item
 		{
 			get { return _item; }
@@ -54,6 +62,8 @@ namespace Dota_Toolbox.Parser
 			set { _id = value; }
 		}
 
+		#region General
+		//General
 		public string[] abilityBehavior
 		{
 			get { return _abilityBehavior; }
@@ -90,7 +100,9 @@ namespace Dota_Toolbox.Parser
 			get { return _itemKillable; }
 			set { _itemKillable = value; }
 		}
-
+		#endregion
+		#region Stats
+		//Stats
 		public int abilityCastRange
 		{
 			get { return _abilityCastRange; }
@@ -101,7 +113,9 @@ namespace Dota_Toolbox.Parser
 			get { return _abilityCastPoint; }
 			set { _abilityCastPoint = value; }
 		}
-
+		#endregion
+		#region Item Info
+		//Item Info
 		public int itemCost
 		{
 			get { return _itemCost; }
@@ -142,9 +156,36 @@ namespace Dota_Toolbox.Parser
 			get { return _sideShop; }
 			set { _sideShop = value; }
 		}
-
-
-
+		#endregion
+		#region Misc
+		//Misc
+		public int itemStockInitial
+		{
+			get { return _itemStockInitial; }
+			set { _itemStockInitial = value; }
+		}
+		public int itemStockMax
+		{
+			get { return _itemStockMax; }
+			set { _itemStockMax = value; }
+		}
+		public int itemStockTime
+		{
+			get { return _itemStockTime; }
+			set { _itemStockTime = value; }
+		}
+		public bool itemSupport
+		{
+			get { return _itemSupport; }
+			set { _itemSupport = value; }
+		}
+		public string itemDeclaration
+		{
+			get { return _itemDeclaration; }
+			set { _itemDeclaration = value; }
+		}
+		#endregion
+		#endregion
 
 		public Item() { }
 		public Item(KeyValue item)
@@ -175,6 +216,13 @@ namespace Dota_Toolbox.Parser
 			this.itemPermanent = FindBool("ItemPermanent");
 			this.itemInitialCharges = FindInt("ItemInitialCharges");
 			this.sideShop = FindBool("SideShop");
+
+			//Misc
+			this.itemStockInitial = FindInt("ItemStockInitial");
+			this.itemStockMax = FindInt("ItemStockMax");
+			this.itemStockTime = FindInt("itemStockTime");
+			this.itemSupport = FindBool("ItemSupport");
+			this.itemDeclaration = FindString("ItemDeclaration");
 		}
 
 		#region Methods

@@ -59,6 +59,7 @@ namespace Dota_Toolbox.Pages.Tools
 		{
 			try
 			{
+				Console.WriteLine(parentKeysList.Count);
 				for (int i = 0; i < parentKeysList.Count; i++)
 					if (String.Equals(itemName, root.children[i].Key))
 						tempItem = new Item(root.children[i]);
@@ -216,6 +217,7 @@ namespace Dota_Toolbox.Pages.Tools
 			parentKeys.Clear();
 			valueKeys.Clear();
 			docks.Clear();
+			parentKeysList.Clear();
 			itemlist_treeview.Items.Clear();
 			parentKeys.Add(treeRootItem);
 			itemlist_treeview.Items.Add(treeRootItem);

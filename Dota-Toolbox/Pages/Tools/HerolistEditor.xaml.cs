@@ -82,7 +82,7 @@ namespace Dota_Toolbox.Pages.Tools
 
 		private void SaveToFile()
 		{
-			Utils.SaveToFile(kv_list, (ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file));
+			Utils.SaveToFile(kv_list, ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file);
 		}
 		#endregion
 

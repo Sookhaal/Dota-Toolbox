@@ -17,26 +17,25 @@ using System.Windows.Shapes;
 namespace Dota_Toolbox.Windows
 {
 	/// <summary>
-	/// Interaction logic for AbilityBehaviorsDialog.xaml
+	/// Interaction logic for ItemDeclarationsDialog.xaml
 	/// </summary>
-	public partial class AbilityBehaviorsDialog : ModernDialog
+	public partial class ItemDeclarationsDialog : ModernDialog
 	{
-		public List<string> abilityBehavior_list = new List<string>();
-		public AbilityBehaviorsDialog()
+		public List<string> itemDeclarations_list = new List<string>();
+
+		public ItemDeclarationsDialog()
 		{
 			InitializeComponent();
-
-			// define the dialog buttons
 			this.Buttons = new Button[] { this.OkButton, this.CancelButton };
 		}
 
-		public void SetBehaviors()
+		public void SetTags()
 		{
-			for (int i = 0; i < abilityBehavior_list.Count; i++)
-				AddComboBox(abilityBehavior_list[i]);
+			for (int i = 0; i < itemDeclarations_list.Count; i++)
+				AddComboBox(itemDeclarations_list[i]);
 		}
 
-		public string[] GetNewBehaviors()
+		public string[] GetNewTags()
 		{
 			List<string> str = new List<string>();
 			for (int i = 0; i < s.Children.Count - 1; i++)			//-1 Because "Add Behavior" button is a child
@@ -44,41 +43,36 @@ namespace Dota_Toolbox.Windows
 				DockPanel t = (DockPanel)s.Children[i];
 				ComboBox cbox = (ComboBox)t.Children[1];
 				str.Add(cbox.SelectedItem.ToString());
+				Console.WriteLine(str[i]);
 			}
 			return str.ToArray();
-		}
-
-		private void AddComboBox()
-		{
-			AddComboBox("");
 		}
 
 		private void AddComboBox(string item)
 		{
 			DockPanel dockPanel = new DockPanel();
 			ComboBox c = new ComboBox();
-			for (int i = 0; i < abilityBehavior_combobox_base.Items.Count; i++)
-				c.Items.Add(abilityBehavior_combobox_base.Items[i]);
+			for (int i = 0; i < itemDeclarations_combobox_base.Items.Count; i++)
+				c.Items.Add(itemDeclarations_combobox_base.Items[i]);
 			Button b = new Button();
 			b.Background = x_button_base.Background;
 			b.Content = "X";
 			b.Margin = new Thickness(4, 0, 0, 0);
-			b.Click += RemoveBehavior_Click;
+			b.Click += RemoveDeclaration_Click;
 			DockPanel.SetDock(b, Dock.Right);
 			c.SelectedItem = item;
 			dockPanel.Children.Add(b);
 			dockPanel.Children.Add(c);
 			dockPanel.Margin = new Thickness(0, 0, 0, 4);
 			s.Children.Insert(s.Children.Count - 1, dockPanel);		//Insert the DockPanel on top of the button
-			//Console.WriteLine(s.Children.Count);
 		}
 
-		private void AddBehavior_Click(object sender, RoutedEventArgs e)
+		private void AddDeclaration_Click(object sender, RoutedEventArgs e)
 		{
-			AddComboBox(abilityBehavior_combobox_base.Items[0].ToString());
+			AddComboBox(itemDeclarations_combobox_base.Items[0].ToString());
 		}
 
-		private void RemoveBehavior_Click(object sender, RoutedEventArgs e)
+		private void RemoveDeclaration_Click(object sender, RoutedEventArgs e)
 		{
 			var tempButton = (Button)sender;
 			var parent = (UIElement)tempButton.Parent;

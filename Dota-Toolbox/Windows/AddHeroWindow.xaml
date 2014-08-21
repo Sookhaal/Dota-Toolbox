@@ -7,7 +7,7 @@
 				  mc:Ignorable="d"
 				  Title="Add Hero"
 				  Style="{StaticResource BlankWindow}"
-				  Width="320" ShowInTaskbar="False" Height="320" ResizeMode="NoResize" Topmost="True">
+				  Width="320" Height="320" ResizeMode="NoResize" Topmost="True">
 	<Grid>
 		<StackPanel Margin="0 0 0 0">
 			<TextBlock Text="Enter a name or pick one from the list." Margin="0 0 0 4" FontSize="16" HorizontalAlignment="Center"/>

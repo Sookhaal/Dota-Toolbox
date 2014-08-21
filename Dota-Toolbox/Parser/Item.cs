@@ -13,7 +13,7 @@ namespace Dota_Toolbox.Parser
 	{
 		private KeyValue _item;
 		private string _name;
-		private int _id;
+		private string _id;
 
 		//General
 		private string[] _abilityBehavior;
@@ -25,25 +25,25 @@ namespace Dota_Toolbox.Parser
 		private bool _itemKillable;
 
 		//Stats
-		private int _abilityCastRange;
-		private float _abilityCastPoint;
+		private string _abilityCastRange;
+		private string _abilityCastPoint;
 
 		//Item Info
-		private int _itemCost;
-		private string _itemShopTags;
+		private string _itemCost;
+		private string[] _itemShopTags;
 		private string _itemQuality;
 		private bool _itemStackable;
 		private string _itemShareability;
 		private bool _itemPermanent;
-		private int _itemInitialCharges;
+		private string _itemInitialCharges;
 		private bool _sideShop;
 
 		//Misc
-		private int _itemStockInitial;
-		private int _itemStockMax;
-		private int _itemStockTime;
+		private string _itemStockInitial;
+		private string _itemStockMax;
+		private string _itemStockTime;
 		private bool _itemSupport;
-		private string _itemDeclaration;
+		private string[] _itemDeclarations;
 
 		#region Get/Set
 		public KeyValue item
@@ -56,7 +56,7 @@ namespace Dota_Toolbox.Parser
 			get { return _name; }
 			set { _name = value; }
 		}
-		public int id
+		public string id
 		{
 			get { return _id; }
 			set { _id = value; }
@@ -103,12 +103,12 @@ namespace Dota_Toolbox.Parser
 		#endregion
 		#region Stats
 		//Stats
-		public int abilityCastRange
+		public string abilityCastRange
 		{
 			get { return _abilityCastRange; }
 			set { _abilityCastRange = value; }
 		}
-		public float abilityCastPoint
+		public string abilityCastPoint
 		{
 			get { return _abilityCastPoint; }
 			set { _abilityCastPoint = value; }
@@ -116,12 +116,12 @@ namespace Dota_Toolbox.Parser
 		#endregion
 		#region Item Info
 		//Item Info
-		public int itemCost
+		public string itemCost
 		{
 			get { return _itemCost; }
 			set { _itemCost = value; }
 		}
-		public string itemShopTags
+		public string[] itemShopTags
 		{
 			get { return _itemShopTags; }
 			set { _itemShopTags = value; }
@@ -146,7 +146,7 @@ namespace Dota_Toolbox.Parser
 			get { return _itemPermanent; }
 			set { _itemPermanent = value; }
 		}
-		public int itemInitialCharges
+		public string itemInitialCharges
 		{
 			get { return _itemInitialCharges; }
 			set { _itemInitialCharges = value; }
@@ -159,17 +159,17 @@ namespace Dota_Toolbox.Parser
 		#endregion
 		#region Misc
 		//Misc
-		public int itemStockInitial
+		public string itemStockInitial
 		{
 			get { return _itemStockInitial; }
 			set { _itemStockInitial = value; }
 		}
-		public int itemStockMax
+		public string itemStockMax
 		{
 			get { return _itemStockMax; }
 			set { _itemStockMax = value; }
 		}
-		public int itemStockTime
+		public string itemStockTime
 		{
 			get { return _itemStockTime; }
 			set { _itemStockTime = value; }
@@ -179,10 +179,10 @@ namespace Dota_Toolbox.Parser
 			get { return _itemSupport; }
 			set { _itemSupport = value; }
 		}
-		public string itemDeclaration
+		public string[] itemDeclarations
 		{
-			get { return _itemDeclaration; }
-			set { _itemDeclaration = value; }
+			get { return _itemDeclarations; }
+			set { _itemDeclarations = value; }
 		}
 		#endregion
 		#endregion
@@ -192,79 +192,120 @@ namespace Dota_Toolbox.Parser
 		{
 			this.item = item;
 			this.name = item.Key;
-			this.id = FindInt("ID");
+			this.id = GetString("ID");
 
 			//General
-			this.abilityBehavior = FindStringArray("AbilityBehavior");
-			this.abilityUnitTargetTeam = FindString("AbilityUnitTargetTeam");
-			this.abilityUnitTargetType = FindString("AbilityUnitTargetType");
-			this.model = FindString("Model");
-			this.baseClass = FindString("BaseClass");
-			this.abilityTextureName = FindString("AbilityTextureName");
-			this.itemKillable = FindBool("ItemKillable");
+			this.abilityBehavior = GetStringArray("AbilityBehavior");
+			this.abilityUnitTargetTeam = GetString("AbilityUnitTargetTeam");
+			this.abilityUnitTargetType = GetString("AbilityUnitTargetType");
+			this.model = GetString("Model");
+			this.baseClass = GetString("BaseClass");
+			this.abilityTextureName = GetString("AbilityTextureName");
+			this.itemKillable = GetBool("ItemKillable");
 
 			//Stats
-			this._abilityCastRange = FindInt("AbilityCastRange");
-			this._abilityCastPoint = FindFloat("AbilityCastPoint");
+			this._abilityCastRange = GetString("AbilityCastRange");
+			this._abilityCastPoint = GetString("AbilityCastPoint");
 
 			//Item Info
-			this.itemCost = FindInt("ItemCost");
-			this.itemShopTags = FindString("ItemShopTags");
-			this.itemQuality = FindString("ItemQuality");
-			this.itemStackable = FindBool("ItemStackable");
-			this.itemShareability = FindString("ItemShareability");
-			this.itemPermanent = FindBool("ItemPermanent");
-			this.itemInitialCharges = FindInt("ItemInitialCharges");
-			this.sideShop = FindBool("SideShop");
+			this.itemCost = GetString("ItemCost");
+			this.itemShopTags = GetStringArraySemi("ItemShopTags");
+			this.itemQuality = GetString("ItemQuality");
+			this.itemStackable = GetBool("ItemStackable");
+			this.itemShareability = GetString("ItemShareability");
+			this.itemPermanent = GetBool("ItemPermanent");
+			this.itemInitialCharges = GetString("ItemInitialCharges");
+			this.sideShop = GetBool("SideShop");
 
 			//Misc
-			this.itemStockInitial = FindInt("ItemStockInitial");
-			this.itemStockMax = FindInt("ItemStockMax");
-			this.itemStockTime = FindInt("itemStockTime");
-			this.itemSupport = FindBool("ItemSupport");
-			this.itemDeclaration = FindString("ItemDeclaration");
+			this.itemStockInitial = GetString("ItemStockInitial");
+			this.itemStockMax = GetString("ItemStockMax");
+			this.itemStockTime = GetString("itemStockTime");
+			this.itemSupport = GetBool("ItemSupport");
+			this.itemDeclarations = GetStringArray("ItemDeclarations");
+		}
+
+		public KeyValue ToKeyValue()
+		{
+			KeyValue item = new KeyValue(name);
+			return item;
 		}
 
 		#region Methods
-		public string FindString(string key)
+		public string GetString(string key)
 		{
 			for (int i = 0; i < item.children.Count; i++)
 				if (String.Equals(key, item.children[i].Key))
 					return item.children[i].Value;
 			return "";
 		}
-
-		public int FindInt(string key)
-		{
-			for (int i = 0; i < item.children.Count; i++)
-				if (String.Equals(key, item.children[i].Key))
-					return Convert.ToInt16(item.children[i].Value);
-			return -1;
-		}
-
-		public float FindFloat(string key)
-		{
-			for (int i = 0; i < item.children.Count; i++)
-				if (String.Equals(key, item.children[i].Key))
-					return float.Parse(item.children[i].Value, CultureInfo.InvariantCulture.NumberFormat);
-			return -1;
-		}
-
-		public bool FindBool(string key)
+		public bool GetBool(string key)
 		{
 			for (int i = 0; i < item.children.Count; i++)
 				if (String.Equals(key, item.children[i].Key))
 					return Convert.ToBoolean(Convert.ToInt16(item.children[i].Value));
 			return false;
 		}
-
-		public string[] FindStringArray(string key)
+		public string[] GetStringArray(string key)
 		{
-			string[] split = FindString(key).Split(new Char[] { '|' });
+			string[] split = GetString(key).Split(new Char[] { '|' });
 			for (int i = 0; i < split.Length; i++)
 			{
 				split[i] = Regex.Replace(split[i], " ", "");
 			}
+			return split;
+		}
+		public string[] GetStringArraySemi(string key)
+		{
+			string[] split = GetString(key).Split(new Char[] { ';' });
+			return split;
+		}
+
+
+		public void SetString(string key, string value)
+		{
+			if (value != "")
+			{
+				for (int i = 0; i < item.children.Count; i++)
+					if (String.Equals(key, item.children[i].Key))
+					{
+						item.children[i].Value = value;
+						return;
+					}
+				KeyValue newKV = new KeyValue(key, value);
+				Console.WriteLine(item.children.Count);
+				Console.WriteLine(item.children[item.children.Count - 1].Key);
+
+				item.AddChild(newKV);
+			}
+			else
+			{
+				for (int i = 0; i < item.children.Count; i++)
+					if (String.Equals(key, item.children[i].Key))
+					{
+						Console.WriteLine("Removed " + key);
+						item.children.RemoveAt(i);
+					}
+			}
+		}
+		public void SetBool(string key, bool value)
+		{
+			for (int i = 0; i < item.children.Count; i++)
+				if (String.Equals(key, item.children[i].Key))
+					item.children[i].Value = Convert.ToInt16(value).ToString();
+		}
+		public string[] SetStringArray(string key, string value)
+		{
+			string[] split = GetString(key).Split(new Char[] { '|' });
+			for (int i = 0; i < split.Length; i++)
+			{
+				split[i] = Regex.Replace(split[i], " ", "");
+			}
+			return split;
+		}
+		public string[] SetStringArraySemi(string key, string value)
+		{
+			string[] split = GetString(key).Split(new Char[] { ';' });
 			return split;
 		}
 		#endregion

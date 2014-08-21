@@ -2,6 +2,7 @@
 using FirstFloor.ModernUI.Windows.Controls;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,11 +23,26 @@ namespace Dota_Toolbox.Windows
 	/// </summary>
 	public partial class PromptDialog : ModernDialog
 	{
+		public PromptDialog()
+		{
+			InitializeComponent();
+			this.Buttons = new Button[] { this.OkButton, this.CancelButton };
+		}
+
 		public PromptDialog(string title)
 		{
 			InitializeComponent();
 			this.Title = title;
 			this.Buttons = new Button[] { this.OkButton, this.CancelButton };
+		}
+
+		public PromptDialog(bool okButton, bool cancelButton)
+		{
+			InitializeComponent();
+			if (okButton)
+				this.Buttons = new Button[] { this.OkButton };
+			if (cancelButton)
+				this.Buttons.ToList().Add(this.CancelButton);
 		}
 
 		public PromptDialog(string title, bool okButton, bool cancelButton)
@@ -37,6 +53,25 @@ namespace Dota_Toolbox.Windows
 			if (cancelButton)
 				this.Buttons.ToList().Add(this.CancelButton);
 			this.Title = title;
+		}
+
+		public void MissingFile(string fileName, string link)
+		{
+			File.Create(ApplicationSettings.applicationPath + "\\Data\\" + fileName).Close();
+			this.Title = "Error";
+			Button b = new Button();
+			b.Content = fileName;
+			b.Click += MissingFile_Clicked;
+
+			AddColoredHeader("File Not Found");
+			AddButton(b);
+			AddBBCode("An empty file has been created. Feel free to edit it.");
+			AddBBCode("[url=" + link + "]Default Values.[/url]");
+		}
+
+		private void MissingFile_Clicked(object sender, RoutedEventArgs e)
+		{
+			Utils.ExplorePath(ApplicationSettings.applicationPath + "\\Data");
 		}
 
 		public void AddHeader(string text)

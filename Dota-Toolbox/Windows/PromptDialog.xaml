@@ -7,6 +7,6 @@
 				  xmlns:local="clr-namespace:Dota_Toolbox"
 				  mc:Ignorable="d" 
 				  d:DesignHeight="300" d:DesignWidth="300"
-				  Title="ModernDialog" Topmost="True">
+				  Title="ModernDialog">
 	<StackPanel x:Name="s"/>
 </mui:ModernDialog>

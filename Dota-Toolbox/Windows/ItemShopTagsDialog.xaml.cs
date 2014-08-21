@@ -21,7 +21,7 @@ namespace Dota_Toolbox.Windows
 	/// </summary>
 	public partial class ItemShopTagsDialog : ModernDialog
 	{
-		public List<string> itemShopTags_list_base = new List<string>();
+		public List<string> itemShopTags_list = new List<string>();
 		public ItemShopTagsDialog()
 		{
 			InitializeComponent();
@@ -30,7 +30,53 @@ namespace Dota_Toolbox.Windows
 
 		public void SetTags()
 		{
+			for (int i = 0; i < itemShopTags_list.Count; i++)
+				AddComboBox(itemShopTags_list[i]);
+		}
 
+		public string[] GetNewTags()
+		{
+			List<string> str = new List<string>();
+			for (int i = 0; i < s.Children.Count - 1; i++)			//-1 Because "Add Behavior" button is a child
+			{
+				DockPanel t = (DockPanel)s.Children[i];
+				ComboBox cbox = (ComboBox)t.Children[1];
+				str.Add(cbox.SelectedItem.ToString());
+				Console.WriteLine(str[i]);
+			}
+			return str.ToArray();
+		}
+
+		private void AddComboBox(string item)
+		{
+			DockPanel dockPanel = new DockPanel();
+			ComboBox c = new ComboBox();
+			for (int i = 0; i < shopTags_combobox_base.Items.Count; i++)
+				c.Items.Add(shopTags_combobox_base.Items[i]);
+			Button b = new Button();
+			b.Background = x_button_base.Background;
+			b.Content = "X";
+			b.Margin = new Thickness(4, 0, 0, 0);
+			b.Click += RemoveShopTag_Click;
+			DockPanel.SetDock(b, Dock.Right);
+			c.SelectedItem = item;
+			dockPanel.Children.Add(b);
+			dockPanel.Children.Add(c);
+			dockPanel.Margin = new Thickness(0, 0, 0, 4);
+			s.Children.Insert(s.Children.Count - 1, dockPanel);		//Insert the DockPanel on top of the button
+			//Console.WriteLine(s.Children.Count);
+		}
+
+		private void AddShopTag_Click(object sender, RoutedEventArgs e)
+		{
+			AddComboBox(shopTags_combobox_base.Items[0].ToString());
+		}
+
+		private void RemoveShopTag_Click(object sender, RoutedEventArgs e)
+		{
+			var tempButton = (Button)sender;
+			var parent = (UIElement)tempButton.Parent;
+			s.Children.Remove(parent);
 		}
 	}
 }

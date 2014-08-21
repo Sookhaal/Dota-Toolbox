@@ -31,7 +31,7 @@ namespace Dota_Toolbox.Windows
 			try { heroesListLines = File.ReadAllLines("Data\\DefaultHeroesList.txt"); }
 			catch
 			{
-				Button b = new Button();
+				/*Button b = new Button();
 				b.Content = "DefaultHeroesList.txt";
 				b.Click += ErrorButtonClicked;
 
@@ -39,8 +39,10 @@ namespace Dota_Toolbox.Windows
 				errorDialog.AddColoredHeader("File Not Found");
 				errorDialog.AddButton(b);
 				errorDialog.AddBBCode("An empty file will be created. Feel free to edit it.");
-				errorDialog.AddBBCode("[url=http://pastebin.com/raw.php?i=EU59vmAb]Default Values.[/url]");
+				errorDialog.AddBBCode("[url=http://pastebin.com/raw.php?i=EU59vmAb]Default Values.[/url]");*/
 
+				errorDialog = new PromptDialog(true, false);
+				errorDialog.MissingFile("DefaultHeroesList.txt", "http://pastebin.com/raw.php?i=EU59vmAb");
 				errorDialog.ShowDialog();
 			}
 

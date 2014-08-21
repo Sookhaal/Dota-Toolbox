@@ -44,9 +44,18 @@ namespace Dota_Toolbox
 		private static string Write(List<KeyValue> parent)
 		{
 			string o = "";
+			//Console.Write("Key: " + parent[0].Key);
+			//Console.WriteLine(" count: " + parent.Count);
 			for (int i = 0; i < parent.Count; i++)
 			{
-				parent[i].TabIndex = parent[i].Parent.TabIndex + 1;
+				try
+				{
+					parent[i].TabIndex = parent[i].Parent.TabIndex + 1;
+				}
+				catch
+				{
+					Console.WriteLine("Error: " + parent[i].Key);
+				}
 
 				for (int a = 0; a < parent[i].TabIndex; a++)
 					o += "\t";

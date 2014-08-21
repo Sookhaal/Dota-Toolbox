@@ -92,6 +92,15 @@
     <Compile Include="Windows\AbilityBehaviorsDialog.xaml.cs">
       <DependentUpon>AbilityBehaviorsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\AbilitySpecialDialog.xaml.cs">
+      <DependentUpon>AbilitySpecialDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AbilityUnitTargetFlagsDialog.xaml.cs">
+      <DependentUpon>AbilityUnitTargetFlagsDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AbilityUnitTargetTypeDialog.xaml.cs">
+      <DependentUpon>AbilityUnitTargetTypeDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\AddHeroWindow.xaml.cs">
       <DependentUpon>AddHeroWindow.xaml</DependentUpon>
     </Compile>
@@ -171,6 +180,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\AbilitySpecialDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AbilityUnitTargetFlagsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AbilityUnitTargetTypeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\AddHeroWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -214,6 +235,9 @@
     </Content>
     <Content Include="Data\DefaultAbilityUnitTargetType.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\DefaultBaseClass.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\DefaultHeroesList.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -30,7 +30,12 @@ namespace Dota_Toolbox
 				string root = "";
 				root = "\"" + kv_list[0].Parent.Key + "\"";
 				root += "\r\n{\r\n";
+				Console.WriteLine("Writing " + kv_list.Count + "items");
+				Stopwatch sw = new Stopwatch();
+				sw.Start();
 				root += Write(kv_list[0].Parent.children);
+				sw.Stop();
+				Console.WriteLine("in " + sw.Elapsed + "seconds");
 				root += "}";
 				File.WriteAllText(outputPath, root);
 			}
@@ -44,40 +49,48 @@ namespace Dota_Toolbox
 		private static string Write(List<KeyValue> parent)
 		{
 			string o = "";
-			//Console.Write("Key: " + parent[0].Key);
 			//Console.WriteLine(" count: " + parent.Count);
-			for (int i = 0; i < parent.Count; i++)
+			try
 			{
-				try
+				for (int i = 0; i < parent.Count; i++)
 				{
-					parent[i].TabIndex = parent[i].Parent.TabIndex + 1;
-				}
-				catch
-				{
-					Console.WriteLine("Error: " + parent[i].Key);
-				}
+					try
+					{
+						parent[i].TabIndex = parent[i].Parent.TabIndex + 1;
+					}
+					catch
+					{
+						Console.WriteLine("Error: " + parent[i].Key);
+					}
 
-				for (int a = 0; a < parent[i].TabIndex; a++)
-					o += "\t";
-				o += "\"" + parent[i].Key + "\"";
-				if (parent[i].Value != "")
-				{
-					o += "\t\"" + parent[i].Value + "\"\r\n";
-				}
-				else
-				{
-					o += "\r\n";
 					for (int a = 0; a < parent[i].TabIndex; a++)
 						o += "\t";
-					o += "{";
-					o += "\r\n";
-					o += Write(parent[i].children);
-					for (int a = 0; a < parent[i].TabIndex; a++)
-						o += "\t";
-					o += "}\r\n";
+					o += "\"" + parent[i].Key + "\"";
+					//if (parent[i].Value != "")
+					if (!parent[i].HasChildren)
+					{
+						o += "\t\"" + parent[i].Value + "\"\r\n";
+					}
+					else
+					{
+						o += "\r\n";
+						for (int a = 0; a < parent[i].TabIndex; a++)
+							o += "\t";
+						o += "{";
+						o += "\r\n";
+						o += Write(parent[i].children);
+						for (int a = 0; a < parent[i].TabIndex; a++)
+							o += "\t";
+						o += "}\r\n";
+					}
 				}
+				return o;
 			}
-			return o;
+			catch
+			{
+				Console.WriteLine("Error: " + parent.ToString());
+				return o;
+			}
 		}
 	}
 }

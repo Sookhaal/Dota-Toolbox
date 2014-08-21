@@ -53,7 +53,6 @@ namespace Dota_Toolbox.Pages.Tools
 				addKVWindow.parentWindow = this;
 				OpenAddHeroWindow();
 			}
-
 		}
 
 		private void ToggleRemoveButton()

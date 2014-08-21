@@ -5,10 +5,9 @@
 				  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 				  xmlns:mui="http://firstfloorsoftware.com/ModernUI"
 				  mc:Ignorable="d" 
-				  d:DesignHeight="300" d:DesignWidth="300"
 				  Title="Add Item"
 				  Style="{StaticResource BlankWindow}"
-				  Width="600" Height="405" MinWidth="600" MinHeight="405" MaxHeight="405" Loaded="WindowLoaded">
+				  Width="650" Height="500" MinWidth="650" MinHeight="500" MaxHeight="500" Loaded="WindowLoaded">
 	<Grid>
 		<ScrollViewer>
 			<StackPanel>
@@ -20,9 +19,9 @@
 						<ColumnDefinition Width="Auto"/>
 						<ColumnDefinition Width="1*"/>
 					</Grid.ColumnDefinitions>
-					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" Text="Name:" />
+					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Ex: item_my_new_item" Text="Name:" />
 					<TextBox   Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Ex: item_my_new_item" x:Name="name"/>
-					<TextBlock Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" Text="ID:"/>
+					<TextBlock Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Unique number up from 0. Ex: 3678" Text="ID:"/>
 					<TextBox   Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Unique number up from 0. Ex: 3678" x:Name="id" />
 				</Grid>
 				<Separator Height="15"/>
@@ -30,40 +29,48 @@
 				<Grid Margin="0 0 0 4">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
 						<ColumnDefinition Width="*"/>
 						<ColumnDefinition Width="Auto"/>
 						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="Auto"/>
 					</Grid.ColumnDefinitions>
-					<Button    Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" Content="Ability Behaviors" ToolTip="Fix Tooltip." Click="Behaviors_Click"/>
-					<TextBlock Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" Text="Target Team:"/>
-					<ComboBox  Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="abilityUnitTargetTeam"/>
-					<Button    Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" Content="Target Types" ToolTip="Fix Tooltip." Click="TargetTypes_Click"/>
-					<Button    Grid.Column="4" Margin="0 0 4 0" VerticalAlignment="Center" Content="Target Flags" ToolTip="Fix Tooltip." Click="TargetFlags_Click"/>
+					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Base Class:"/>
+					<ComboBox  Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="baseClass" IsEditable="True"/>
+					<TextBlock Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Can kill on ground?" Text="Killable:"/>
+					<CheckBox  Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Can kill on ground?" x:Name="itemKillable"/>
+					<Button    Grid.Column="4" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="Target Types" Click="TargetTypes_Click"/>
+					<Button    Grid.Column="5" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="Target Flags" Click="TargetFlags_Click"/>
 				</Grid>
 				<Grid Margin="0 0 0 4">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="Auto"/>
 						<ColumnDefinition Width="2*"/>
 						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="*"/>
 					</Grid.ColumnDefinitions>
-					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" Text="Model:"/>
+					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Ex: models/props_gameplay/boots_of_speed.mdl" Text="Model:"/>
 					<TextBox   Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Ex: models/props_gameplay/boots_of_speed.mdl" x:Name="model"/>
-					<TextBlock Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" Text="Base Class:"/>
-					<ComboBox  Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="baseClass" IsEditable="True"/>
+					<Button    Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="Ability Behaviors" Click="Behaviors_Click"/>
 				</Grid>
 				<Grid Margin="0 0 0 4">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="Auto"/>
 						<ColumnDefinition Width="*"/>
 						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="1.25*"/>
 					</Grid.ColumnDefinitions>
-					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" Text="Texture Name:"/>
+					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Ex: item_greater_clarity" Text="Texture Name:"/>
 					<TextBox   Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Ex: item_greater_clarity" x:Name="abilityTextureName"/>
-					<TextBlock Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" Text="Killable:"/>
-					<CheckBox  Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Can you destroy it on the ground?" x:Name="itemKillable"/>
+					<TextBlock Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Target Team:"/>
+					<ComboBox  Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="abilityUnitTargetTeam"/>
+				</Grid>
+				<Grid Margin="0 0 0 4">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Ex: item_greater_clarity" Text="Cast Animation:"/>
+					<TextBox   Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Ex: item_greater_clarity" x:Name="abilityCastAnimation"/>
 				</Grid>
 				<Separator Height="15"/>
 				<!--Stats-->
@@ -73,11 +80,23 @@
 						<ColumnDefinition Width="*"/>
 						<ColumnDefinition Width="Auto"/>
 						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
 					</Grid.ColumnDefinitions>
-					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" Text="Cast Range:"/>
-					<TextBox   Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Ex: item_my_new_item" x:Name="abilityCastRange"/>
-					<TextBlock Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" Text="Cast Point:"/>
-					<TextBox   Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Unique number up from 0. Ex: 3678" x:Name="abilityCastPoint"/>
+					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Cast Range:"/>
+					<TextBox   Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="abilityCastRange"/>
+					<TextBlock Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Cast Point:"/>
+					<TextBox   Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="abilityCastPoint"/>
+					<TextBlock Grid.Column="4" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="CD:"/>
+					<TextBox   Grid.Column="5" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="abilityCooldown"/>
+					<TextBlock Grid.Column="6" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Channel Time:"/>
+					<TextBox   Grid.Column="7" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="abilityChannelTime"/>
+					<TextBlock Grid.Column="8" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Mana Cost:"/>
+					<TextBox   Grid.Column="9" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="abilityManaCost"/>
 				</Grid>
 				<Separator Height="15"/>
 				<!--Item Info-->
@@ -92,12 +111,12 @@
 						<ColumnDefinition Width="Auto"/>
 					</Grid.ColumnDefinitions>
 					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Number up from 0. Ex: 500" Text="Gold Cost:" />
-					<TextBox   Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" x:Name="itemCost"/>
+					<TextBox   Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Number up from 0. Ex: 500" x:Name="itemCost"/>
 					<Button    Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Choose every coherent tags." Content="Shop Tags" Click="ShopTags_Click"/>
-					<TextBlock Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" Text="Quality:" />
+					<TextBlock Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Quality:" />
 					<ComboBox  Grid.Column="4" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="itemQuality"/>
-					<TextBlock Grid.Column="5" Margin="0 0 4 0" VerticalAlignment="Center" Text="Stackable:"/>
-					<CheckBox  Grid.Column="6" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Is it stackable?" x:Name="itemStackable"/>
+					<TextBlock Grid.Column="5" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Can you stack it?" Text="Stackable:"/>
+					<CheckBox  Grid.Column="6" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Can you stack it?" x:Name="itemStackable"/>
 				</Grid>
 				<Grid Margin="0 0 0 4">
 					<Grid.ColumnDefinitions>
@@ -110,13 +129,13 @@
 						<ColumnDefinition Width="Auto"/>
 						<ColumnDefinition Width="Auto"/>
 					</Grid.ColumnDefinitions>
-					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" Text="Shareability:"/>
+					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Shareability:"/>
 					<ComboBox  Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="itemShareability"/>
-					<TextBlock Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" Text="Permanent:"/>
-					<CheckBox  Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Destroyed on use?" x:Name="itemPermanent"/>
-					<TextBlock Grid.Column="4" Margin="0 0 4 0" VerticalAlignment="Center" Text="Charges:"/>
+					<TextBlock Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Permanent:"/>
+					<CheckBox  Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="itemPermanent"/>
+					<TextBlock Grid.Column="4" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Number up from 0. Ex: 15" Text="Charges:"/>
 					<TextBox   Grid.Column="5" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Number up from 0. Ex: 15" x:Name="itemInitialCharges" Text="0"/>
-					<TextBlock Grid.Column="6" Margin="0 0 4 0" VerticalAlignment="Center" Text="Sideshop:"/>
+					<TextBlock Grid.Column="6" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Is it available in the SideShop?" Text="Sideshop:"/>
 					<CheckBox  Grid.Column="7" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Is it available in the SideShop?" x:Name="sideShop"/>
 				</Grid>
 				<Separator Height="15"/>
@@ -133,15 +152,27 @@
 						<ColumnDefinition Width="Auto"/>
 						<ColumnDefinition Width="Auto"/>
 					</Grid.ColumnDefinitions>
-					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" Text="Stock Initial:"/>
+					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Stock Initial:"/>
 					<TextBox   Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="itemStockInitial"/>
-					<TextBlock Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" Text="Stock Max:"/>
+					<TextBlock Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Stock Max:"/>
 					<TextBox   Grid.Column="3" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="itemStockMax"/>
-					<TextBlock Grid.Column="4" Margin="0 0 4 0" VerticalAlignment="Center" Text="Stock Time:"/>
+					<TextBlock Grid.Column="4" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Stock Time:"/>
 					<TextBox   Grid.Column="5" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="itemStockTime"/>
-					<TextBlock Grid.Column="6" Margin="0 0 4 0" VerticalAlignment="Center" Text="Support:"/>
+					<TextBlock Grid.Column="6" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Text="Support:"/>
 					<CheckBox  Grid.Column="7" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." x:Name="itemSupport"/>
 					<Button    Grid.Column="8" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="Item Declarations"  Click="Declarations_Click"/>
+				</Grid>
+				<Separator Height="15"/>
+				<Grid Margin="0 0 0 4">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Button    Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="NOT YET IMPLEMENTED" Grid.ColumnSpan="3"/>
+					<!--<Button    Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="Ability Special"  Click="Special_Click"/>
+					<Button    Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="On Spell Start"  Click="Declarations_Click"/>
+					<Button    Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="Item Declarations"  Click="Declarations_Click"/>-->
 				</Grid>
 				<Separator Height="15"/>
 				<Grid>

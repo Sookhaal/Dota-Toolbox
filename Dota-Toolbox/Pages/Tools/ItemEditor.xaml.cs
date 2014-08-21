@@ -59,12 +59,10 @@ namespace Dota_Toolbox.Pages.Tools
 		{
 			try
 			{
-				Console.WriteLine(parentKeysList.Count);
 				for (int i = 0; i < parentKeysList.Count; i++)
 					if (String.Equals(itemName, root.children[i].Key))
 						tempItem = new Item(root.children[i]);
 				addItemWindow.a = tempItem;
-				addItemWindow.Title = "Edit Item";
 				addItemWindow.Show();
 			}
 			catch
@@ -90,7 +88,7 @@ namespace Dota_Toolbox.Pages.Tools
 
 		private void SaveToFile()
 		{
-			Utils.SaveToFile(kv_list, (ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file));
+			Utils.SaveToFile(kv_list, (ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + "TestingItem.txt"));
 		}
 		#endregion
 
@@ -200,11 +198,11 @@ namespace Dota_Toolbox.Pages.Tools
 		#region UI Events
 		private void AddItem_Click(object sender, RoutedEventArgs e)
 		{
-			//Console.WriteLine(root.children[0].children.Count);
 		}
 
 		private void RemoveItem_Click(object sender, RoutedEventArgs e)
 		{
+			RemoveItem();
 		}
 
 		private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -242,16 +240,41 @@ namespace Dota_Toolbox.Pages.Tools
 		private Button tempButton;
 		private void Item_Click(object sender, MouseButtonEventArgs e)
 		{
-			//Console.WriteLine(parentKeysList.Count);
 			tempPanel = sender as DockPanel;
 			tempButton = tempPanel.Children[0] as Button;
 			OpenAddItemWindow(tempButton.Content.ToString());
+			addItemWindow.Title = "Edit Item";
 			/*tempStackpanel = sender as DockPanel;
 			tempTextbox = tempStackpanel.Children[0] as TextBox;
 			selectedKey = tempTextbox.Text;
 			removeKV_Button.Content = "Remove " + selectedKey;*/
-			/*if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-				RemoveHero();*/
+			if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+				RemoveItem();
+		}
+
+		private void RemoveItem()
+		{
+			for (int i = 0; i < kv_list.Count; i++)
+			{
+
+			}
+			kv_list.RemoveAt(kv_list.Count - 1);
+			root.RemoveChild(kv_list[kv_list.Count - 1]);
+			UpdateTreeView();
+			//DoRootHierarchy(kv_list);
+			SaveToFile();
+		}
+
+		private void UpdateTreeView()
+		{
+			treeRootItem.Items.Clear();
+			parentKeys.Clear();
+			valueKeys.Clear();
+			parentKeys.Add(treeRootItem);
+			itemlist_treeview.Items.Clear();
+			itemlist_treeview.Items.Add(treeRootItem);
+			parentKeysList.Clear();
+			DoRootHierarchy(kv_list);
 		}
 		#endregion
 	}

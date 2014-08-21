@@ -17,16 +17,21 @@ namespace Dota_Toolbox.Parser
 
 		//General
 		private string[] _abilityBehavior;
+		private string[] _abilityUnitTargetFlags;
 		private string _abilityUnitTargetTeam;
-		private string _abilityUnitTargetType;
+		private string[] _abilityUnitTargetType;
 		private string _model;
 		private string _baseClass;
 		private string _abilityTextureName;
 		private bool _itemKillable;
+		private string _abilityCastAnimation;
 
 		//Stats
 		private string _abilityCastRange;
 		private string _abilityCastPoint;
+		private string _abilityCooldown;
+		private string _abilityChannelTime;
+		private string _abilityManaCost;
 
 		//Item Info
 		private string _itemCost;
@@ -69,13 +74,17 @@ namespace Dota_Toolbox.Parser
 			get { return _abilityBehavior; }
 			set { _abilityBehavior = value; }
 		}
+		public string[] abilityUnitTargetFlags
+		{
+			get { return _abilityUnitTargetFlags; }
+			set { _abilityUnitTargetFlags = value; }
+		}
 		public string abilityUnitTargetTeam
 		{
 			get { return _abilityUnitTargetTeam; }
 			set { _abilityUnitTargetTeam = value; }
 		}
-
-		public string abilityUnitTargetType
+		public string[] abilityUnitTargetType
 		{
 			get { return _abilityUnitTargetType; }
 			set { _abilityUnitTargetType = value; }
@@ -100,6 +109,11 @@ namespace Dota_Toolbox.Parser
 			get { return _itemKillable; }
 			set { _itemKillable = value; }
 		}
+		public string abilityCastAnimation
+		{
+			get { return _abilityCastAnimation; }
+			set { _abilityCastAnimation = value; }
+		}
 		#endregion
 		#region Stats
 		//Stats
@@ -112,6 +126,21 @@ namespace Dota_Toolbox.Parser
 		{
 			get { return _abilityCastPoint; }
 			set { _abilityCastPoint = value; }
+		}
+		public string abilityCooldown
+		{
+			get { return _abilityCooldown; }
+			set { _abilityCooldown = value; }
+		}
+		public string abilityChannelTime
+		{
+			get { return _abilityChannelTime; }
+			set { _abilityChannelTime = value; }
+		}
+		public string abilityManaCost
+		{
+			get { return _abilityManaCost; }
+			set { _abilityManaCost = value; }
 		}
 		#endregion
 		#region Item Info
@@ -196,16 +225,21 @@ namespace Dota_Toolbox.Parser
 
 			//General
 			this.abilityBehavior = GetStringArray("AbilityBehavior");
+			this.abilityUnitTargetFlags = GetStringArray("AbilityUnitTargetFlags");
 			this.abilityUnitTargetTeam = GetString("AbilityUnitTargetTeam");
-			this.abilityUnitTargetType = GetString("AbilityUnitTargetType");
+			this.abilityUnitTargetType = GetStringArray("AbilityUnitTargetType");
 			this.model = GetString("Model");
 			this.baseClass = GetString("BaseClass");
 			this.abilityTextureName = GetString("AbilityTextureName");
 			this.itemKillable = GetBool("ItemKillable");
+			this.abilityCastAnimation = GetString("AbilityCastAnimation");
 
 			//Stats
-			this._abilityCastRange = GetString("AbilityCastRange");
-			this._abilityCastPoint = GetString("AbilityCastPoint");
+			this.abilityCastRange = GetString("AbilityCastRange");
+			this.abilityCastPoint = GetString("AbilityCastPoint");
+			this.abilityCooldown = GetString("AbilityCooldown");
+			this.abilityChannelTime = GetString("AbilityChannelTime");
+			this.abilityManaCost = GetString("AbilityManaCost");
 
 			//Item Info
 			this.itemCost = GetString("ItemCost");
@@ -223,12 +257,6 @@ namespace Dota_Toolbox.Parser
 			this.itemStockTime = GetString("itemStockTime");
 			this.itemSupport = GetBool("ItemSupport");
 			this.itemDeclarations = GetStringArray("ItemDeclarations");
-		}
-
-		public KeyValue ToKeyValue()
-		{
-			KeyValue item = new KeyValue(name);
-			return item;
 		}
 
 		#region Methods
@@ -273,9 +301,6 @@ namespace Dota_Toolbox.Parser
 						return;
 					}
 				KeyValue newKV = new KeyValue(key, value);
-				Console.WriteLine(item.children.Count);
-				Console.WriteLine(item.children[item.children.Count - 1].Key);
-
 				item.AddChild(newKV);
 			}
 			else
@@ -290,23 +315,15 @@ namespace Dota_Toolbox.Parser
 		}
 		public void SetBool(string key, bool value)
 		{
-			for (int i = 0; i < item.children.Count; i++)
-				if (String.Equals(key, item.children[i].Key))
-					item.children[i].Value = Convert.ToInt16(value).ToString();
+			SetString(key, Convert.ToInt16(value).ToString());
 		}
-		public string[] SetStringArray(string key, string value)
+		public void SetStringArray(string key, string[] value)
 		{
-			string[] split = GetString(key).Split(new Char[] { '|' });
-			for (int i = 0; i < split.Length; i++)
-			{
-				split[i] = Regex.Replace(split[i], " ", "");
-			}
-			return split;
+			SetString(key, String.Join(" | ", value));
 		}
-		public string[] SetStringArraySemi(string key, string value)
+		public void SetStringArraySemi(string key, string[] value)
 		{
-			string[] split = GetString(key).Split(new Char[] { ';' });
-			return split;
+			SetString(key, String.Join(";", value));
 		}
 		#endregion
 	}

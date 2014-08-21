@@ -1,4 +1,5 @@
 ﻿using FirstFloor.ModernUI.Windows.Controls;
+using KVLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,23 +18,23 @@ using System.Windows.Shapes;
 namespace Dota_Toolbox.Windows
 {
 	/// <summary>
-	/// Interaction logic for AbilityBehaviorsDialog.xaml
+	/// Interaction logic for AbilitySpecialDialog.xaml
 	/// </summary>
-	public partial class AbilityBehaviorsDialog : ModernDialog
+	public partial class AbilitySpecialDialog : ModernDialog
 	{
-		public List<string> abilityBehavior_list = new List<string>();
-		public AbilityBehaviorsDialog()
+		public List<KeyValue> abilitySpecial_list = new List<KeyValue>();
+		public AbilitySpecialDialog()
 		{
 			InitializeComponent();
 			this.Buttons = new Button[] { this.OkButton, this.CancelButton };
 		}
 
-		public void SetBehaviors()
+		/*public void SetBehaviors()
 		{
-			for (int i = 0; i < abilityBehavior_list.Count; i++)
-				if (abilityBehavior_list[i] != "")
-					AddComboBox(abilityBehavior_list[i]);
-		}
+			for (int i = 0; i < abilitySpecial_list.Count; i++)
+				if (abilitySpecial_list[i] != "")
+					AddComboBox(abilitySpecial_list[i]);
+		}*/
 
 		public string[] GetNewBehaviors()
 		{

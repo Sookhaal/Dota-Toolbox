@@ -25,13 +25,15 @@ namespace Dota_Toolbox.Windows
 	/// </summary>
 	public partial class AddItemWindow : ModernWindow
 	{
+		private string[] currentLines;
 		public Item a;
 		private PromptDialog errorDialog;
 		private AbilityBehaviorsDialog abilityBehaviorsDialog;
+		private AbilityUnitTargetTypeDialog abilityUnitTargetTypeDialog;
+		private AbilityUnitTargetFlagsDialog abilityUnitTargetFlagsDialog;
 		private ItemShopTagsDialog itemShopTagsDialog;
 		private ItemDeclarationsDialog itemDeclarationsDialog;
-		private string[] currentLines;
-		private string abilityBehaviorString, abilityUnitTargetTypeString, itemShopTagsString, itemDeclarationsString;
+		private AbilitySpecialDialog abilitySpecialDialog;
 
 		public AddItemWindow()
 		{
@@ -41,24 +43,29 @@ namespace Dota_Toolbox.Windows
 
 		private void WindowLoaded(object sender, RoutedEventArgs e)
 		{
-			//this.Topmost = true;
 			name.Text = a.name;
 			id.Text = a.id.ToString();
 
-			abilityBehaviorString = String.Join(" | ", a.abilityBehavior);
+			//abilityBehaviorString = String.Join(" | ", a.abilityBehavior);	//Not Needed
 			ParseDataToCombobox("DefaultAbilityUnitTargetTeam.txt", abilityUnitTargetTeam, "http://pastebin.com/raw.php?i=rMdBZKAT");
 			abilityUnitTargetTeam.SelectedItem = a.abilityUnitTargetTeam;
-			abilityUnitTargetTypeString = String.Join(" | ", a.abilityUnitTargetType);
+			//abilityUnitTargetTypeString = String.Join(" | ", a.abilityUnitTargetType);//Not needed
 			model.Text = a.model;
-			baseClass.Text = a.baseClass;
+			//baseClass.Text = a.baseClass;
+			ParseDataToCombobox("DefaultBaseClass.txt", baseClass, "");
+			baseClass.SelectedItem = a.baseClass;
 			abilityTextureName.Text = a.abilityTextureName;
 			itemKillable.IsChecked = a.itemKillable;
+			abilityCastAnimation.Text = a.abilityCastAnimation;
 
 			abilityCastRange.Text = a.abilityCastRange.ToString();
 			abilityCastPoint.Text = a.abilityCastPoint.ToString();
+			abilityCooldown.Text = a.abilityCooldown.ToString();
+			abilityChannelTime.Text = a.abilityChannelTime.ToString();
+			abilityManaCost.Text = a.abilityManaCost.ToString();
 
 			itemCost.Text = a.itemCost.ToString();
-			itemShopTagsString = String.Join(";", a.itemShopTags);
+			//itemShopTagsString = String.Join(";", a.itemShopTags);	//Not needed
 			ParseDataToCombobox("DefaultItemQuality.txt", itemQuality, "http://pastebin.com/raw.php?i=n6kxbGZm");
 			itemQuality.SelectedItem = a.itemQuality;
 			itemStackable.IsChecked = a.itemStackable;
@@ -71,7 +78,7 @@ namespace Dota_Toolbox.Windows
 			itemStockInitial.Text = a.itemStockInitial.ToString();
 			itemStockMax.Text = a.itemStockMax.ToString();
 			itemStockTime.Text = a.itemStockTime.ToString();
-			itemDeclarationsString = String.Join(" | ", a.itemDeclarations);
+			//itemDeclarationsString = String.Join(" | ", a.itemDeclarations);	//Not Needed
 		}
 
 
@@ -133,6 +140,24 @@ namespace Dota_Toolbox.Windows
 			try { ParseDataToCombobox("DefaultItemDeclarations.txt", itemDeclarationsDialog.itemDeclarations_combobox_base, "http://pastebin.com/raw.php?i=grDzMrNs"); }
 			catch { CreateitemDeclarationsDialog(); }
 		}
+
+		private void CreateAbilityUnitTargetTypeDialog()
+		{
+			try { ParseDataToCombobox("DefaultAbilityUnitTargetType.txt", abilityUnitTargetTypeDialog.abilityUnitTargetType_combobox_base, "http://pastebin.com/raw.php?i=rh8XeH8Q"); }
+			catch { CreateAbilityUnitTargetTypeDialog(); }
+		}
+
+		private void CreateAbilityUnitTargetFlagsDialog()
+		{
+			try { ParseDataToCombobox("DefaultAbilityUnitTargetFlags.txt", abilityUnitTargetFlagsDialog.abilityUnitTargetFlags_combobox_base, "http://pastebin.com/raw.php?i=b5jtUZvW"); }
+			catch { CreateAbilityUnitTargetFlagsDialog(); }
+		}
+
+		private void CreateAbilitySpecialDialog()
+		{
+			/*try { ParseDataToCombobox("DefaultAbilityUnitTargetFlags.txt", abilityUnitTargetFlagsDialog.abilityUnitTargetFlags_combobox_base, "http://pastebin.com/raw.php?i=b5jtUZvW"); }
+			catch { CreateAbilitySpecialDialog(); }*/
+		}
 		#endregion
 
 		private void FileError_Button_Clicked(object sender, RoutedEventArgs e)
@@ -150,7 +175,6 @@ namespace Dota_Toolbox.Windows
 			abilityBehaviorsDialog.ShowDialog();
 			if (abilityBehaviorsDialog.DialogResult == true)
 				a.abilityBehavior = abilityBehaviorsDialog.GetNewBehaviors();
-			abilityBehaviorString = String.Join(" | ", a.abilityBehavior);
 		}
 
 		private void ShopTags_Click(object sender, RoutedEventArgs e)
@@ -165,14 +189,52 @@ namespace Dota_Toolbox.Windows
 				a.itemShopTags = itemShopTagsDialog.GetNewTags();
 		}
 
+		private void Declarations_Click(object sender, RoutedEventArgs e)
+		{
+			itemDeclarationsDialog = new ItemDeclarationsDialog();
+			itemDeclarationsDialog.Owner = ModernWindow.GetWindow(this);
+			itemDeclarationsDialog.itemDeclarations_list = a.itemDeclarations.ToList();
+			CreateitemDeclarationsDialog();
+			itemDeclarationsDialog.SetDeclarations();
+			itemDeclarationsDialog.ShowDialog();
+			if (itemDeclarationsDialog.DialogResult == true)
+				a.itemDeclarations = itemDeclarationsDialog.GetNewDeclarations();
+		}
+
 		private void TargetTypes_Click(object sender, RoutedEventArgs e)
 		{
-
+			abilityUnitTargetTypeDialog = new AbilityUnitTargetTypeDialog();
+			abilityUnitTargetTypeDialog.Owner = ModernWindow.GetWindow(this);
+			abilityUnitTargetTypeDialog.abilityUnitTargetTypes_list = a.abilityUnitTargetType.ToList();
+			CreateAbilityUnitTargetTypeDialog();
+			abilityUnitTargetTypeDialog.SetTypes();
+			abilityUnitTargetTypeDialog.ShowDialog();
+			if (abilityUnitTargetTypeDialog.DialogResult == true)
+				a.abilityUnitTargetType = abilityUnitTargetTypeDialog.GetNewTypes();
 		}
 
 		private void TargetFlags_Click(object sender, RoutedEventArgs e)
 		{
+			abilityUnitTargetFlagsDialog = new AbilityUnitTargetFlagsDialog();
+			abilityUnitTargetFlagsDialog.Owner = ModernWindow.GetWindow(this);
+			abilityUnitTargetFlagsDialog.abilityUnitTargetFlags_list = a.abilityUnitTargetFlags.ToList();
+			CreateAbilityUnitTargetFlagsDialog();
+			abilityUnitTargetFlagsDialog.SetFlags();
+			abilityUnitTargetFlagsDialog.ShowDialog();
+			if (abilityUnitTargetFlagsDialog.DialogResult == true)
+				a.abilityUnitTargetFlags = abilityUnitTargetFlagsDialog.GetNewFlags();
+		}
 
+		private void Special_Click(object sender, RoutedEventArgs e)
+		{
+			/*abilitySpecialDialog = new AbilitySpecialDialog();
+			abilitySpecialDialog.Owner = ModernWindow.GetWindow(this);
+			//abilitySpecialDialog.abilitySpecial_list = a.abilitySpecial.ToList();
+			CreateAbilitySpecialDialog();
+			abilitySpecialDialog.SetSpecial();
+			abilitySpecialDialog.ShowDialog();
+			if (abilitySpecialDialog.DialogResult == true)
+				a.abilityUnitTargetFlags = abilitySpecialDialog.GetNewSpecial();*/
 		}
 
 		private void OK_Click(object sender, RoutedEventArgs e)
@@ -188,47 +250,37 @@ namespace Dota_Toolbox.Windows
 			this.Close();
 		}
 
-		private void Declarations_Click(object sender, RoutedEventArgs e)
-		{
-			itemDeclarationsDialog = new ItemDeclarationsDialog();
-			itemDeclarationsDialog.Owner = ModernWindow.GetWindow(this);
-			itemDeclarationsDialog.itemDeclarations_list = a.itemDeclarations.ToList();
-			CreateitemDeclarationsDialog();
-			itemDeclarationsDialog.SetTags();
-			itemDeclarationsDialog.ShowDialog();
-			if (itemDeclarationsDialog.DialogResult == true)
-				a.itemDeclarations = itemDeclarationsDialog.GetNewTags();
-		}
+
 
 		private void SaveAll()
 		{
 			a.item.Key = name.Text;
 			a.SetString("ID", id.Text);
 
-			a.SetString("AbilityBehavior", abilityBehaviorString);
+			a.SetStringArray("AbilityBehavior", a.abilityBehavior);
 			a.SetString("AbilityUnitTargetTeam", abilityUnitTargetTeam.Text);
-			a.SetString("AbilityUnitTargetType", abilityUnitTargetTypeString);
+			a.SetStringArray("AbilityUnitTargetType", a.abilityUnitTargetType);
 			a.SetString("Model", model.Text);
 			a.SetString("BaseClass", baseClass.Text);
 			a.SetString("AbilityTextureName", abilityTextureName.Text);
-			//a.SetBool("ItemKillable", itemKillable.IsChecked.Value);
+			a.SetBool("ItemKillable", itemKillable.IsChecked.Value);
 
 			a.SetString("AbilityCastRange", abilityCastRange.Text);
 			a.SetString("AbilityCastPoint", abilityCastPoint.Text);
 
 			a.SetString("ItemCost", itemCost.Text);
-			a.SetString("ItemShopTags", itemShopTagsString);
-			//a.SetString("ItemQuality", itemQuality.Text);
-			//a.SetBool("ItemStackable", itemStackable.IsChecked.Value);
+			a.SetStringArraySemi("ItemShopTags", a.itemShopTags);
+			a.SetString("ItemQuality", itemQuality.Text);
+			a.SetBool("ItemStackable", itemStackable.IsChecked.Value);
 			a.SetString("ItemShareability", itemShareability.Text);
-			//a.SetBool("ItemPermanent", itemPermanent.IsChecked.Value);
+			a.SetBool("ItemPermanent", itemPermanent.IsChecked.Value);
 			a.SetString("ItemInitialCharges", itemInitialCharges.Text);
-			//a.SetBool("SideShop", sideShop.IsChecked.Value);
+			a.SetBool("SideShop", sideShop.IsChecked.Value);
 
 			a.SetString("ItemStockInitial", itemStockInitial.Text);
 			a.SetString("ItemStockMax", itemStockMax.Text);
 			a.SetString("itemStockTime", itemStockTime.Text);
-			a.SetString("ItemDeclarations", itemDeclarationsString);
+			a.SetStringArray("ItemDeclarations", a.itemDeclarations);
 		}
 	}
 }

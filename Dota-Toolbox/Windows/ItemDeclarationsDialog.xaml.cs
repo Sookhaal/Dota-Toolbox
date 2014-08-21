@@ -22,20 +22,20 @@ namespace Dota_Toolbox.Windows
 	public partial class ItemDeclarationsDialog : ModernDialog
 	{
 		public List<string> itemDeclarations_list = new List<string>();
-
 		public ItemDeclarationsDialog()
 		{
 			InitializeComponent();
 			this.Buttons = new Button[] { this.OkButton, this.CancelButton };
 		}
 
-		public void SetTags()
+		public void SetDeclarations()
 		{
 			for (int i = 0; i < itemDeclarations_list.Count; i++)
-				AddComboBox(itemDeclarations_list[i]);
+				if (itemDeclarations_list[i] != "")
+					AddComboBox(itemDeclarations_list[i]);
 		}
 
-		public string[] GetNewTags()
+		public string[] GetNewDeclarations()
 		{
 			List<string> str = new List<string>();
 			for (int i = 0; i < s.Children.Count - 1; i++)			//-1 Because "Add Behavior" button is a child

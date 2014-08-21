@@ -1,19 +1,19 @@
-﻿<mui:ModernDialog x:Class="Dota_Toolbox.Windows.ItemShopTagsDialog"
+﻿<mui:ModernDialog x:Class="Dota_Toolbox.Windows.AbilityUnitTargetFlagsDialog"
 				  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 				  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 				  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 				  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 				  xmlns:mui="http://firstfloorsoftware.com/ModernUI"
 				  mc:Ignorable="d" 
-				  Title="Item Shop Tags"
+				  Title="Ability Unit Target Flags"
 				  Width="470" MinWidth="470" MinHeight="200" Topmost="True">
 	<Grid>
 		<DockPanel Margin="0 0 0 4" Visibility="Collapsed">
-			<Button x:Name="x_button_base" Content="X" DockPanel.Dock="Right" Margin="4 0 0 0" Background="#FFBF1E1E" />
-			<ComboBox x:Name="shopTags_combobox_base"/>
+			<Button x:Name="x_button_base" Content="X" DockPanel.Dock="Right" Margin="4 0 0 0" Background="#FFBF1E1E"/>
+			<ComboBox x:Name="abilityUnitTargetFlags_combobox_base"/>
 		</DockPanel>
 		<StackPanel x:Name="s">
-			<Button Content="Add Shop Tag" Click="AddShopTag_Click"/>
+			<Button Content="Add Unit Flag" Click="AddFlag_Click"/>
 		</StackPanel>
 	</Grid>
 </mui:ModernDialog>

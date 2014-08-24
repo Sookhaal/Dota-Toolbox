@@ -5,13 +5,11 @@ using KVLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Navigation;
 
 namespace Dota_Toolbox.Pages.Tools
 {
@@ -21,7 +19,7 @@ namespace Dota_Toolbox.Pages.Tools
 	public partial class HerolistEditor : UserControl
 	{
 		public static ObservableCollection<KeyValue> kv_list = new ObservableCollection<KeyValue>();
-		private string filePath, selectedKey, file = "herolist.txt";
+		private string filePath, selectedKey, file = "herolist.txt", rootKey = "CustomHeroList";
 		private KVDocument doc = new KVDocument();
 		private List<DockPanel> docks;
 		private TreeViewItem treeRootItem;
@@ -69,28 +67,23 @@ namespace Dota_Toolbox.Pages.Tools
 			}
 		}
 
-		public void AddHero(string name)
-		{
-			newKV = new KeyValue(name, "1");
-			kv_list.Add(newKV);
-			root.AddChild(newKV);
-			AddBoolKey(treeRootItem, newKV);
-			ToggleRemoveButton();
-			SaveToFile();
-		}
-
 		private void SaveToFile()
 		{
-			Utils.SaveToFile(kv_list, ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file);
+			Utils.SaveToFile(kv_list, ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file, rootKey);
 		}
-		#endregion
+		#endregion Methods
 
 		#region Updates
 		private void UpdateKVList()
 		{
 			kv_list.Clear();
 			herolist_treeview.Items.Clear();
-			kv_list = doc.ReadKeyValuesFromFile(filePath);
+			kv_list = doc.ReadKeyValuesFromFile(filePath, rootKey);
+			if (doc.emptyFile)
+			{
+				Utils.CreateNewFile(filePath, rootKey);
+				doc.emptyFile = false;
+			}
 			ToggleRemoveButton();
 		}
 
@@ -200,6 +193,16 @@ namespace Dota_Toolbox.Pages.Tools
 			parent.Items.Add(parentKeys[parentKeys.Count - 1]);
 		}
 
+		public void AddHero(string name)
+		{
+			newKV = new KeyValue(name, "1");
+			kv_list.Add(newKV);
+			root.AddChild(newKV);
+			AddBoolKey(treeRootItem, newKV);
+			ToggleRemoveButton();
+			SaveToFile();
+		}
+
 		private void RemoveHero()
 		{
 			for (int i = 0; i < kv_list.Count; i++)
@@ -210,7 +213,8 @@ namespace Dota_Toolbox.Pages.Tools
 					kv_list.RemoveAt(i);
 					UpdateTreeView();
 					ToggleRemoveButton();
-					SaveToFile();
+					if (ApplicationSettings.instance.autoSave)
+						SaveToFile();
 					return;
 				}
 			}
@@ -218,12 +222,12 @@ namespace Dota_Toolbox.Pages.Tools
 			root.RemoveChild(kv_list[kv_list.Count - 1]);
 			ToggleRemoveButton();
 			UpdateTreeView();
-			SaveToFile();
+			if (ApplicationSettings.instance.autoSave)
+				SaveToFile();
 		}
-		#endregion
+		#endregion Updates
 
 		#region UI Events
-
 		private void GridSelectionChange(object sender, SelectionChangedEventArgs e)
 		{
 			ToggleRemoveButton();
@@ -264,19 +268,12 @@ namespace Dota_Toolbox.Pages.Tools
 
 		private void KV_Click(object sender, MouseButtonEventArgs e)
 		{
-			try
-			{
-				tempPanel = sender as DockPanel;
-				tempTextbox = tempPanel.Children[1] as TextBox;
-				selectedKey = tempTextbox.Text;
-				removeKV_Button.Content = "Remove " + selectedKey;
-				if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-					RemoveHero();
-			}
-			catch
-			{
-				Console.WriteLine("File is empty.");
-			}
+			tempPanel = sender as DockPanel;
+			tempTextbox = tempPanel.Children[1] as TextBox;
+			selectedKey = tempTextbox.Text;
+			removeKV_Button.Content = "Remove " + selectedKey;
+			if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+				RemoveHero();
 		}
 
 		private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -284,7 +281,7 @@ namespace Dota_Toolbox.Pages.Tools
 			if (Directory.Exists(ApplicationSettings.instance.currentModPath))
 				filePath = ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file;
 			UpdateKVList();
-			treeRootItem.Header = "CustomHeroList";
+			treeRootItem.Header = rootKey;
 			treeRootItem.Items.Clear();
 			parentKeys.Clear();
 			valueKeys.Clear();
@@ -295,8 +292,14 @@ namespace Dota_Toolbox.Pages.Tools
 
 			//parentKeysList.Add(kv_list[0].Parent);
 			DoRootHierarchy(kv_list);
-			if (kv_list != null)
+			if (kv_list.Count > 0)
 				root = kv_list[0].Parent;
+			else
+			{
+				root = new KeyValue(rootKey);
+				root.AddChild(new KeyValue(""));			//Small hack to get a proper root if file is empty
+				root.RemoveChild(root.children[0]);
+			}
 		}
 
 		private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

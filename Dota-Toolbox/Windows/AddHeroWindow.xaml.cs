@@ -41,7 +41,7 @@ namespace Dota_Toolbox.Windows
 				errorDialog.AddBBCode("An empty file will be created. Feel free to edit it.");
 				errorDialog.AddBBCode("[url=http://pastebin.com/raw.php?i=EU59vmAb]Default Values.[/url]");*/
 
-				errorDialog = new PromptDialog(true, false);
+				errorDialog = new PromptDialog(true, false, ModernWindow.GetWindow(this));
 				errorDialog.MissingFile("DefaultHeroesList.txt", "http://pastebin.com/raw.php?i=EU59vmAb");
 				errorDialog.ShowDialog();
 			}

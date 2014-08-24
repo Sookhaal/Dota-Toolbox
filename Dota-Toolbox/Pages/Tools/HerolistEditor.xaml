@@ -16,10 +16,16 @@
 			<TreeView x:Name="herolist_treeview" ScrollViewer.CanContentScroll="True" HorizontalContentAlignment="Stretch"/>
 		</ScrollViewer>
 		<StackPanel VerticalAlignment="Bottom" >
-			<DockPanel Margin="0 0 0 4">
-				<Button Margin="0 0 2 0" Content="Add Hero" Click="AddHero_Click" MinWidth="250"/>
-				<Button Margin="2 0 0 0" Content="Remove Hero" Click="RemoveHero_Click" x:Name="removeKV_Button" DockPanel.Dock="Right"/>
-			</DockPanel>
+			<Grid Margin="0 0 0 4">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<Button Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" Content="Save" Click="RemoveHero_Click"/>
+				<Button Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" Content="Add Hero" Click="AddHero_Click"/>
+				<Button Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" Content="Remove Hero" Click="RemoveHero_Click" x:Name="removeKV_Button"/>
+			</Grid>
 			<!--<Button Content="Save" Click="SaveButton_Click" Height="30" />-->
 		</StackPanel>
 	</Grid>

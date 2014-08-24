@@ -6,18 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Dota_Toolbox.Pages.Tools
 {
@@ -27,18 +19,20 @@ namespace Dota_Toolbox.Pages.Tools
 	public partial class ItemEditor : UserControl
 	{
 		public static ObservableCollection<KeyValue> kv_list = new ObservableCollection<KeyValue>();
-		private string filePath, selectedKey, file = "npc_items_custom.txt";
+		public static string file = "npc_items_custom.txt";
+		public static int index;
+		private string filePath, selectedKey, rootKey = "DOTAAbilities";
 		private KVDocument doc = new KVDocument();
 		private List<DockPanel> docks;
 		private TreeViewItem treeRootItem;
 		private Binding keyBinding, valueBinding;
-		private AddItemWindow addItemWindow;
-		private KeyValue newKV, root;
+		private EditItemWindow editItemWindow;
+		private static KeyValue root;
 		private Item tempItem;
 
 		private List<KeyValue> parentKeysList = new List<KeyValue>();
 		private List<KeyValue> valueKeysList = new List<KeyValue>();
-		private List<TreeViewItem> parentKeys = new List<TreeViewItem>();
+		private static List<TreeViewItem> parentKeys = new List<TreeViewItem>();
 		private List<TreeViewItem> valueKeys = new List<TreeViewItem>();
 
 		public ItemEditor()
@@ -49,26 +43,25 @@ namespace Dota_Toolbox.Pages.Tools
 			treeRootItem.IsExpanded = true;
 			docks = new List<DockPanel>();
 		}
-		#region Methods
-		private void OpenAddItemWindow()
-		{
-			OpenAddItemWindow(null);
-		}
 
-		private void OpenAddItemWindow(string itemName)
+		#region Methods
+		private void OpenEditItemWindow(string itemName)
 		{
 			try
 			{
 				for (int i = 0; i < parentKeysList.Count; i++)
 					if (String.Equals(itemName, root.children[i].Key))
+					{
 						tempItem = new Item(root.children[i]);
-				addItemWindow.a = tempItem;
-				addItemWindow.Show();
+						index = i;
+					}
+				editItemWindow.a = tempItem;
+				editItemWindow.Show();
 			}
 			catch
 			{
-				addItemWindow = new AddItemWindow();
-				OpenAddItemWindow(itemName);
+				editItemWindow = new EditItemWindow();
+				OpenEditItemWindow(itemName);
 			}
 		}
 
@@ -88,36 +81,23 @@ namespace Dota_Toolbox.Pages.Tools
 
 		private void SaveToFile()
 		{
-			Utils.SaveToFile(kv_list, (ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + "TestingItem.txt"));
+			Utils.SaveToFile(kv_list, ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file, rootKey);
 		}
-		#endregion
+		#endregion Methods
 
 		#region Updates
 		private void UpdateKVList()
 		{
 			kv_list.Clear();
 			itemlist_treeview.Items.Clear();
-			kv_list = doc.ReadKeyValuesFromFile(filePath);
+			kv_list = doc.ReadKeyValuesFromFile(filePath, rootKey);
+			if (doc.emptyFile)
+			{
+				Utils.CreateNewFile(filePath, rootKey);
+				doc.emptyFile = false;
+			}
 			ToggleRemoveButton();
 		}
-
-		/*private void DoHierarchy(List<KeyValue> input)
-		{
-			for (int x = 0; x < input.Count; x++)
-			{
-				if (input[x].Value == "" && input[x].HasChildren)
-				{
-					AddParentKey(parentKeys[parentKeys.Count - 1], input[x]);
-					parentKeysList.Add(input[x]);
-					DoHierarchy(input[x].children);
-				}
-				else
-				{
-					AddValue(parentKeys[parentKeys.Count - 1], input[x]);
-					valueKeysList.Add(input[x]);
-				}
-			}
-		}*/
 
 		private void DoRootHierarchy(ObservableCollection<KeyValue> input)
 		{
@@ -126,11 +106,6 @@ namespace Dota_Toolbox.Pages.Tools
 				if (input[x].Value == "" && input[x].HasChildren)
 				{
 					AddParentKey(parentKeys[0], input[x]);
-					parentKeysList.Add(input[x]);
-					/*if (input[x].children != null)
-						DoHierarchy(input[x].children);
-					else
-						input[x].children = new List<KeyValue>();*/
 				}
 				else
 				{
@@ -180,8 +155,6 @@ namespace Dota_Toolbox.Pages.Tools
 			keyBinding.Source = keyValue;
 			keyBinding.Mode = BindingMode.TwoWay;
 
-			TextBox keyText = new TextBox();
-			keyText.SetBinding(TextBox.TextProperty, keyBinding);
 			Button keyButton = new Button();
 			keyButton.SetBinding(Button.ContentProperty, keyBinding);
 
@@ -192,12 +165,27 @@ namespace Dota_Toolbox.Pages.Tools
 
 			parentKeys.Add(t);
 			parent.Items.Add(parentKeys[parentKeys.Count - 1]);
+			parentKeysList.Add(keyValue);
 		}
-		#endregion
+
+		public static void UpdateItemNameAt(int index)
+		{
+			var p = parentKeys[index + 1].Header as DockPanel;
+			var b = p.Children[0] as Button;
+			b.Content = root.children[index].Key;
+		}
+		#endregion Updates
 
 		#region UI Events
 		private void AddItem_Click(object sender, RoutedEventArgs e)
 		{
+			KeyValue k = new KeyValue("");
+			k.AddChild(k);
+			k.RemoveChild(k);
+			kv_list.Add(k);
+			root.AddChild(k);
+			AddParentKey(parentKeys[0], k);
+			OpenEditItemWindow(k.Key);
 		}
 
 		private void RemoveItem_Click(object sender, RoutedEventArgs e)
@@ -210,7 +198,7 @@ namespace Dota_Toolbox.Pages.Tools
 			if (Directory.Exists(ApplicationSettings.instance.currentModPath))
 				filePath = ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + file;
 			UpdateKVList();
-			treeRootItem.Header = "DOTAAbilities";
+			treeRootItem.Header = rootKey;
 			treeRootItem.Items.Clear();
 			parentKeys.Clear();
 			valueKeys.Clear();
@@ -221,12 +209,8 @@ namespace Dota_Toolbox.Pages.Tools
 			itemlist_treeview.Items.Add(treeRootItem);
 
 			DoRootHierarchy(kv_list);
-			if (kv_list != null)
+			if (kv_list.Count > 0)
 				root = kv_list[0].Parent;
-		}
-
-		private void Value_Changed(object sender, TextChangedEventArgs e)
-		{
 		}
 
 		private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -236,33 +220,43 @@ namespace Dota_Toolbox.Pages.Tools
 			e.Handled = true;
 		}
 
-		private DockPanel tempPanel;
-		private Button tempButton;
+		private DockPanel clickedPanel;
+		private Button clickedButton;
 		private void Item_Click(object sender, MouseButtonEventArgs e)
 		{
-			tempPanel = sender as DockPanel;
-			tempButton = tempPanel.Children[0] as Button;
-			OpenAddItemWindow(tempButton.Content.ToString());
-			addItemWindow.Title = "Edit Item";
-			/*tempStackpanel = sender as DockPanel;
-			tempTextbox = tempStackpanel.Children[0] as TextBox;
-			selectedKey = tempTextbox.Text;
-			removeKV_Button.Content = "Remove " + selectedKey;*/
+			clickedPanel = sender as DockPanel;
+			clickedButton = clickedPanel.Children[0] as Button;
+			selectedKey = clickedButton.Content.ToString();
+			removeKV_Button.Content = "Remove " + selectedKey;
 			if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+			{
 				RemoveItem();
+				return;
+			}
+			OpenEditItemWindow(selectedKey);
 		}
 
 		private void RemoveItem()
 		{
 			for (int i = 0; i < kv_list.Count; i++)
 			{
-
+				if (String.Equals(selectedKey, root.children[i].Key))
+				{
+					root.RemoveChild(kv_list[i]);
+					kv_list.RemoveAt(i);
+					UpdateTreeView();
+					ToggleRemoveButton();
+					if (ApplicationSettings.instance.autoSave)
+						SaveToFile();
+					return;
+				}
 			}
-			kv_list.RemoveAt(kv_list.Count - 1);
 			root.RemoveChild(kv_list[kv_list.Count - 1]);
+			kv_list.RemoveAt(kv_list.Count - 1);
 			UpdateTreeView();
-			//DoRootHierarchy(kv_list);
-			SaveToFile();
+			ToggleRemoveButton();
+			if (ApplicationSettings.instance.autoSave)
+				SaveToFile();
 		}
 
 		private void UpdateTreeView()
@@ -276,6 +270,11 @@ namespace Dota_Toolbox.Pages.Tools
 			parentKeysList.Clear();
 			DoRootHierarchy(kv_list);
 		}
-		#endregion
+
+		private void Save_Click(object sender, RoutedEventArgs e)
+		{
+			SaveToFile();
+		}
+		#endregion UI Events
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Dota_Toolbox.Settings;
 using Dota_Toolbox.Windows;
+using FirstFloor.ModernUI.Windows.Controls;
 using Ookii.Dialogs.Wpf;
 using System;
 using System.Diagnostics;
@@ -36,6 +37,8 @@ namespace Dota_Toolbox.Pages.Settings
 				dotaFolderBrowser.Description = "Please select DotA 2's main folder.";
 				dotaFolderBrowser.UseDescriptionForTitle = true;
 
+				autoSave.IsChecked = ApplicationSettings.instance.autoSave;
+
 				try
 				{
 					modsList = Directory.GetDirectories(ApplicationSettings.instance.dotaPath + "\\dota_ugc\\game\\dota_addons");
@@ -44,6 +47,7 @@ namespace Dota_Toolbox.Pages.Settings
 				{
 					InvalidDotaPath();
 				}
+
 				for (int i = 0; i < modsList.Length; i++)
 				{
 					modsList[i] = modsList[i].Remove(0, modsList[i].LastIndexOf("\\") + 1);		//Removing path. We keep folder's name.
@@ -52,7 +56,7 @@ namespace Dota_Toolbox.Pages.Settings
 				if (ApplicationSettings.instance.currentMod == "" || ApplicationSettings.instance.currentMod == null)
 					ApplicationSettings.instance.currentMod = modsList[0];
 				modslist_combobox.Text = ApplicationSettings.instance.currentMod;
-				ApplicationSettings.instance.currentModPath = ApplicationSettings.instance.dotaPath + "\\dota_ugc\\game\\dota_addons" + modslist_combobox.Text;
+				ApplicationSettings.instance.currentModPath = ApplicationSettings.instance.dotaPath + "\\dota_ugc\\game\\dota_addons\\" + modslist_combobox.Text;
 			}
 			catch (Exception e)
 			{
@@ -63,7 +67,7 @@ namespace Dota_Toolbox.Pages.Settings
 
 		private void InvalidDotaPath()
 		{
-			PromptDialog errorDialog = new PromptDialog("Error", true, false);
+			PromptDialog errorDialog = new PromptDialog("Error", true, false, ModernWindow.GetWindow(this));
 			errorDialog.AddHeader("Invalid Path");
 			errorDialog.AddTextBlock("Dota 2 path is invalid.\r\nPlease browse to a correct path.");
 			errorDialog.ShowDialog();
@@ -122,11 +126,11 @@ namespace Dota_Toolbox.Pages.Settings
 
 		private void UpdateDotaPath(string newPath)
 		{
-			if (Directory.Exists(newPath) && Directory.Exists(newPath + "\\dota_ugc\\game\\dota_addons"))
+			if (Directory.Exists(newPath) && Directory.Exists(newPath + "\\dota_ugc\\game\\dota_addons\\"))
 			{
 				ApplicationSettings.instance.dotaPath = newPath;
 				dotaPathText.Text = ApplicationSettings.instance.dotaPath;
-				modsList = Directory.GetDirectories(ApplicationSettings.instance.dotaPath + "\\dota_ugc\\game\\dota_addons");
+				modsList = Directory.GetDirectories(ApplicationSettings.instance.dotaPath + "\\dota_ugc\\game\\dota_addons\\");
 				SaveSettings();
 			}
 			else if (dotaPath == null || dotaPathText.Text == "")
@@ -175,6 +179,12 @@ namespace Dota_Toolbox.Pages.Settings
 		private void CurrentModClick(object sender, RoutedEventArgs e)
 		{
 			Utils.ExplorePath(ApplicationSettings.instance.currentModPath);
+		}
+
+		private void ToggleAutoSave(object sender, RoutedEventArgs e)
+		{
+			ApplicationSettings.instance.autoSave = autoSave.IsChecked.Value;
+			SaveSettings();
 		}
 	}
 }

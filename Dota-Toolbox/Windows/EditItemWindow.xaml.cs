@@ -23,10 +23,11 @@ namespace Dota_Toolbox.Windows
 	/// <summary>
 	/// Interaction logic for AddItemWindow.xaml
 	/// </summary>
-	public partial class AddItemWindow : ModernWindow
+	public partial class EditItemWindow : ModernWindow
 	{
 		private string[] currentLines;
 		public Item a;
+		private string rootKey = "DOTAAbilities";
 		private PromptDialog errorDialog;
 		private AbilityBehaviorsDialog abilityBehaviorsDialog;
 		private AbilityUnitTargetTypeDialog abilityUnitTargetTypeDialog;
@@ -35,7 +36,7 @@ namespace Dota_Toolbox.Windows
 		private ItemDeclarationsDialog itemDeclarationsDialog;
 		private AbilitySpecialDialog abilitySpecialDialog;
 
-		public AddItemWindow()
+		public EditItemWindow()
 		{
 			InitializeComponent();
 			this.Topmost = true;
@@ -82,7 +83,7 @@ namespace Dota_Toolbox.Windows
 		}
 
 
-		//Could use ParseDataToList directly. . .
+		//Could use ParseDataToList directly.
 		private void ParseDataToCombobox(string file, ComboBox comboBox, string link)
 		{
 			try
@@ -94,9 +95,8 @@ namespace Dota_Toolbox.Windows
 			}
 			catch
 			{
-				errorDialog = new PromptDialog(true, false);
+				errorDialog = new PromptDialog(true, false, ModernWindow.GetWindow(this));
 				errorDialog.MissingFile(file, link);
-				errorDialog.Owner = ModernWindow.GetWindow(this);
 				this.errorDialog.ShowDialog();
 				if (errorDialog.DialogResult == true)
 					ParseDataToCombobox(file, comboBox, link);
@@ -114,9 +114,8 @@ namespace Dota_Toolbox.Windows
 			}
 			catch
 			{
-				errorDialog = new PromptDialog(true, false);
+				errorDialog = new PromptDialog(true, false, ModernWindow.GetWindow(this));
 				errorDialog.MissingFile(file, link);
-				errorDialog.Owner = ModernWindow.GetWindow(this);
 				errorDialog.ShowDialog();
 				ParseDataToList(file, stringsList, link);
 			}
@@ -239,9 +238,19 @@ namespace Dota_Toolbox.Windows
 
 		private void OK_Click(object sender, RoutedEventArgs e)
 		{
+			if (name.Text == "")
+			{
+				TextBox t = new TextBox();
+				errorDialog = new PromptDialog("Error", ModernWindow.GetWindow(this));
+				errorDialog.AddColoredHeader("Invalid Name");
+				errorDialog.AddTextBlock("Please enter a valid name.");
+				errorDialog.ShowDialog();
+				return;
+			}
 			SaveAll();
-			ItemEditor.kv_list[0] = a.item;
-			Utils.SaveToFile(ItemEditor.kv_list, ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + "TestingItem.txt");
+			ItemEditor.UpdateItemNameAt(ItemEditor.index);
+			if (ApplicationSettings.instance.autoSave)
+				Utils.SaveToFile(ItemEditor.kv_list, ApplicationSettings.instance.currentModPath + "\\scripts\\npc\\" + ItemEditor.file, rootKey);
 			this.Close();
 		}
 
@@ -249,8 +258,6 @@ namespace Dota_Toolbox.Windows
 		{
 			this.Close();
 		}
-
-
 
 		private void SaveAll()
 		{

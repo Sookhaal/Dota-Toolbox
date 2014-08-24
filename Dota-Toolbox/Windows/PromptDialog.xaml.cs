@@ -23,37 +23,46 @@ namespace Dota_Toolbox.Windows
 	/// </summary>
 	public partial class PromptDialog : ModernDialog
 	{
-		public PromptDialog()
+		public PromptDialog(Window owner)
 		{
 			InitializeComponent();
+			this.Owner = owner;
 			this.Buttons = new Button[] { this.OkButton, this.CancelButton };
 		}
 
-		public PromptDialog(string title)
+		public PromptDialog(string title, Window owner)
 		{
 			InitializeComponent();
+			this.Owner = owner;
 			this.Title = title;
 			this.Buttons = new Button[] { this.OkButton, this.CancelButton };
 		}
 
-		public PromptDialog(bool okButton, bool cancelButton)
+		public PromptDialog(bool okButton, bool cancelButton, Window owner)
 		{
 			InitializeComponent();
+			this.Owner = owner;
 			if (okButton)
 				this.Buttons = new Button[] { this.OkButton };
 			if (cancelButton)
 				this.Buttons.ToList().Add(this.CancelButton);
 		}
 
-		public PromptDialog(string title, bool okButton, bool cancelButton)
+		public PromptDialog(string title, bool okButton, bool cancelButton, Window owner)
 		{
 			InitializeComponent();
+			this.Owner = owner;
 			if (okButton)
 				this.Buttons = new Button[] { this.OkButton };
 			if (cancelButton)
 				this.Buttons.ToList().Add(this.CancelButton);
 			this.Title = title;
 		}
+
+		/*public void Clear()
+		{
+			s.Children.Clear();
+		}*/
 
 		public void MissingFile(string fileName, string link)
 		{
@@ -74,11 +83,12 @@ namespace Dota_Toolbox.Windows
 			Utils.ExplorePath(ApplicationSettings.applicationPath + "\\Data");
 		}
 
+		private Thickness baseMargin = new Thickness(0, 0, 0, 4);
 		public void AddHeader(string text)
 		{
 			BBCodeBlock t = new BBCodeBlock();
 			t.BBCode = "[b][size=16]" + text.ToUpper() + "[/b][/size]";
-			t.Margin = new Thickness(0, 0, 0, 4);
+			t.Margin = baseMargin;
 			s.Children.Add(t);
 		}
 
@@ -91,7 +101,7 @@ namespace Dota_Toolbox.Windows
 				ApplicationSettings.instance.accentColor.B.ToString("X2") + "]" +
 				"[b][size=16]" + text.ToUpper() + "[/b][/size]" +
 				"[/color]";
-			t.Margin = new Thickness(0, 0, 0, 4);
+			t.Margin = baseMargin;
 			s.Children.Add(t);
 		}
 
@@ -99,7 +109,7 @@ namespace Dota_Toolbox.Windows
 		{
 			TextBlock t = new TextBlock();
 			t.Text = text;
-			t.Margin = new Thickness(0, 0, 0, 4);
+			t.Margin = baseMargin;
 			s.Children.Add(t);
 		}
 
@@ -107,7 +117,7 @@ namespace Dota_Toolbox.Windows
 		{
 			BBCodeBlock t = new BBCodeBlock();
 			t.BBCode = text;
-			t.Margin = new Thickness(0, 0, 0, 4);
+			t.Margin = baseMargin;
 			s.Children.Add(t);
 		}
 
@@ -120,24 +130,30 @@ namespace Dota_Toolbox.Windows
 				ApplicationSettings.instance.accentColor.B.ToString("X2") + "]" +
 				text +
 				"[/color]";
-			t.Margin = new Thickness(0, 0, 0, 4);
+			t.Margin = baseMargin;
 			s.Children.Add(t);
 		}
 
 		public void AddButton(Button b)
 		{
-			b.Margin = new Thickness(0, 0, 0, 4);
+			b.Margin = baseMargin;
 			s.Children.Add(b);
 		}
 
-		public void AddCombobox(string[] items)
+		public void AddCombobox(ComboBox combobox, string[] items)
 		{
-			ComboBox c = new ComboBox();
+			combobox = new ComboBox();
 			if (items.Length > 0)
 				for (int i = 0; i < items.Length; i++)
-					c.Items.Add(items[i]);
-			c.Margin = new Thickness(0, 0, 0, 4);
-			s.Children.Add(c);
+					combobox.Items.Add(items[i]);
+			combobox.Margin = baseMargin;
+			s.Children.Add(combobox);
+		}
+
+		public void AddTextBox(TextBox textbox)
+		{
+			textbox.Margin = baseMargin;
+			s.Children.Add(textbox);
 		}
 	}
 }

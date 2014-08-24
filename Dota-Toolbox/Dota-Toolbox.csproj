@@ -104,8 +104,8 @@
     <Compile Include="Windows\AddHeroWindow.xaml.cs">
       <DependentUpon>AddHeroWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddItemWindow.xaml.cs">
-      <DependentUpon>AddItemWindow.xaml</DependentUpon>
+    <Compile Include="Windows\EditItemWindow.xaml.cs">
+      <DependentUpon>EditItemWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ItemDeclarationsDialog.xaml.cs">
       <DependentUpon>ItemDeclarationsDialog.xaml</DependentUpon>
@@ -196,7 +196,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\AddItemWindow.xaml">
+    <Page Include="Windows\EditItemWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

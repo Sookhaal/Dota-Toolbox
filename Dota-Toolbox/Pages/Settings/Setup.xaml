@@ -16,9 +16,19 @@
 				</DockPanel>
 				<DockPanel Margin="0 0 0 4">
 					<Button Grid.Column="0" Content="Current mod:" VerticalAlignment="Center" Margin="0 0 4 0" HorizontalAlignment="Left" Click="CurrentModClick" />
-					<ComboBox x:Name="modslist_combobox" Grid.Column="1" IsEditable="True" />
+					<ComboBox x:Name="modslist_combobox" Grid.Column="1" IsEditable="False" />
 				</DockPanel>
 				<mui:BBCodeBlock x:Name="currentModFeedback" BBCode="" VerticalAlignment="Center" Margin="0 0 4 0" HorizontalAlignment="Center"/>
+				<Grid Margin="0 0 0 4">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+					</Grid.ColumnDefinitions>
+					<TextBlock Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" Text="Auto-Save"/>
+					<CheckBox  Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" x:Name="autoSave" Checked="ToggleAutoSave" Unchecked="ToggleAutoSave"/>
+				</Grid>
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>

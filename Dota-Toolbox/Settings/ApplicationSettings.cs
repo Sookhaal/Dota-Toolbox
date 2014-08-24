@@ -38,6 +38,7 @@ namespace Dota_Toolbox.Settings
 		#region Exposed Settings
 		private string _dotaPath, _currentMod, _currentModePath, _theme;
 		private Color _accentColor;
+		private bool _autoSave;
 
 		[XmlElement("DotaPath")]
 		public string dotaPath
@@ -72,6 +73,13 @@ namespace Dota_Toolbox.Settings
 		{
 			get { return _accentColor; }
 			set { _accentColor = value; }
+		}
+
+		[XmlElement("AutoSave")]
+		public bool autoSave
+		{
+			get { return _autoSave; }
+			set { _autoSave = value; }
 		}
 		#endregion
 	}

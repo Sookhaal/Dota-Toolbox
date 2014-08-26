@@ -50,6 +50,9 @@ namespace Dota_Toolbox.Parser
 		private bool _itemSupport;
 		private string[] _itemDeclarations;
 
+		//Spell
+		private KeyValue _abilitySpecials;
+
 		#region Get/Set
 		public KeyValue item
 		{
@@ -214,6 +217,13 @@ namespace Dota_Toolbox.Parser
 			set { _itemDeclarations = value; }
 		}
 		#endregion
+		#region Spell
+		public KeyValue abilitySpecials
+		{
+			get { return _abilitySpecials; }
+			set { _abilitySpecials = value; }
+		}
+		#endregion
 		#endregion
 
 		public Item() { }
@@ -257,6 +267,9 @@ namespace Dota_Toolbox.Parser
 			this.itemStockTime = GetString("itemStockTime");
 			this.itemSupport = GetBool("ItemSupport");
 			this.itemDeclarations = GetStringArray("ItemDeclarations");
+
+			//Spell
+			this.abilitySpecials = GetKV("AbilitySpecial");
 		}
 
 		#region Methods
@@ -287,6 +300,13 @@ namespace Dota_Toolbox.Parser
 		{
 			string[] split = GetString(key).Split(new Char[] { ';' });
 			return split;
+		}
+		public KeyValue GetKV(string key)
+		{
+			for (int i = 0; i < item.children.Count; i++)
+				if (String.Equals(key, item.children[i].Key))
+					return item.children[i];
+			return new KeyValue("");
 		}
 
 
@@ -324,6 +344,19 @@ namespace Dota_Toolbox.Parser
 		public void SetStringArraySemi(string key, string[] value)
 		{
 			SetString(key, String.Join(";", value));
+		}
+		public void SetKV(KeyValue kv)
+		{
+			kv.TabIndex = item.Parent.TabIndex + 2;
+			for (int i = 0; i < item.children.Count; i++)
+				if (String.Equals(kv.Key, item.children[i].Key))
+				{
+					item.children[i] = kv;
+					return;
+				}
+
+			if (kv.Key != "" && kv.HasChildren)
+				item.AddChild(kv);
 		}
 		#endregion
 	}

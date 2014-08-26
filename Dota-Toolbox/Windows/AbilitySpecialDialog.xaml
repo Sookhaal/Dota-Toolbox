@@ -11,27 +11,10 @@
 	<Grid>
 		<DockPanel Margin="0 0 0 4" Visibility="Collapsed">
 			<Button x:Name="x_button_base" Content="X" DockPanel.Dock="Right" Margin="4 0 0 0" Background="#FFBF1E1E"/>
-			<ComboBox x:Name="abilityBehavior_combobox_base"/>
+			<ComboBox x:Name="specialType_combobox_base"/>
 		</DockPanel>
 		<StackPanel x:Name="s">
-			<DockPanel Margin="0 0 0 4">
-				<ComboBox DockPanel.Dock="Left"/>
-				<Button Content="X" DockPanel.Dock="Right" Margin="4 0 0 0" Background="#FFBF1E1E"/>
-				<ComboBox/>
-			</DockPanel>
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="Auto"/>
-				</Grid.ColumnDefinitions>
-				<ComboBox  Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Variable type." x:Name="var_type"/>
-				<TextBox   Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Variable name."/>
-				<TextBox   Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Variable value."/>
-				<Button    Grid.Column="3" Margin="0 0 0 0" VerticalAlignment="Center" Content="X" Background="#FFBF1E1E"/>
-			</Grid>
-			<Button Content="Add Behavior" Click="AddBehavior_Click"/>
+			<Button Margin="0 2 0 0" Content="Add Special" Click="AddSpecial_Click"/>
 		</StackPanel>
 	</Grid>
 </mui:ModernDialog>

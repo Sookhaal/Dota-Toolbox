@@ -49,8 +49,8 @@ namespace Dota_Toolbox
 					root += "}";
 					File.WriteAllText(outputPath, root);
 
-					Console.WriteLine("Wrote " + kv_list.Count + "items");
-					Console.WriteLine("in " + sw.Elapsed + "seconds");
+					Console.WriteLine("Wrote " + kv_list.Count + " items");
+					Console.WriteLine("in " + sw.Elapsed + " seconds");
 				}
 				catch
 				{

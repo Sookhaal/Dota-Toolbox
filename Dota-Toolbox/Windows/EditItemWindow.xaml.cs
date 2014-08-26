@@ -154,8 +154,8 @@ namespace Dota_Toolbox.Windows
 
 		private void CreateAbilitySpecialDialog()
 		{
-			/*try { ParseDataToCombobox("DefaultAbilityUnitTargetFlags.txt", abilityUnitTargetFlagsDialog.abilityUnitTargetFlags_combobox_base, "http://pastebin.com/raw.php?i=b5jtUZvW"); }
-			catch { CreateAbilitySpecialDialog(); }*/
+			try { ParseDataToCombobox("DefaultAbilitySpecials.txt", abilitySpecialDialog.specialType_combobox_base, ""); }
+			catch { CreateAbilitySpecialDialog(); }
 		}
 		#endregion
 
@@ -226,14 +226,14 @@ namespace Dota_Toolbox.Windows
 
 		private void Special_Click(object sender, RoutedEventArgs e)
 		{
-			/*abilitySpecialDialog = new AbilitySpecialDialog();
+			abilitySpecialDialog = new AbilitySpecialDialog();
 			abilitySpecialDialog.Owner = ModernWindow.GetWindow(this);
-			//abilitySpecialDialog.abilitySpecial_list = a.abilitySpecial.ToList();
+			abilitySpecialDialog.abilitySpecials_list = a.abilitySpecials.Children.ToList();
 			CreateAbilitySpecialDialog();
-			abilitySpecialDialog.SetSpecial();
+			abilitySpecialDialog.SetSpecials();
 			abilitySpecialDialog.ShowDialog();
 			if (abilitySpecialDialog.DialogResult == true)
-				a.abilityUnitTargetFlags = abilitySpecialDialog.GetNewSpecial();*/
+				a.abilitySpecials = abilitySpecialDialog.GetNewSpecials();
 		}
 
 		private void OK_Click(object sender, RoutedEventArgs e)
@@ -245,6 +245,10 @@ namespace Dota_Toolbox.Windows
 				errorDialog.AddColoredHeader("Invalid Name");
 				errorDialog.AddTextBlock("Please enter a valid name.");
 				errorDialog.ShowDialog();
+				if (errorDialog.DialogResult == true && t.Text != "")
+					a.name = t.Text;
+				else
+					errorDialog.ShowDialog();
 				return;
 			}
 			SaveAll();
@@ -288,6 +292,8 @@ namespace Dota_Toolbox.Windows
 			a.SetString("ItemStockMax", itemStockMax.Text);
 			a.SetString("itemStockTime", itemStockTime.Text);
 			a.SetStringArray("ItemDeclarations", a.itemDeclarations);
+
+			a.SetKV(a.abilitySpecials);
 		}
 	}
 }

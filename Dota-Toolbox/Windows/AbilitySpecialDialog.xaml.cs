@@ -22,67 +22,124 @@ namespace Dota_Toolbox.Windows
 	/// </summary>
 	public partial class AbilitySpecialDialog : ModernDialog
 	{
-		public List<KeyValue> abilitySpecial_list = new List<KeyValue>();
+		public List<KeyValue> abilitySpecials_list = new List<KeyValue>();
 		public AbilitySpecialDialog()
 		{
 			InitializeComponent();
 			this.Buttons = new Button[] { this.OkButton, this.CancelButton };
 		}
 
-		/*public void SetBehaviors()
+		public void SetSpecials()
 		{
-			for (int i = 0; i < abilitySpecial_list.Count; i++)
-				if (abilitySpecial_list[i] != "")
-					AddComboBox(abilitySpecial_list[i]);
-		}*/
+			for (int i = 0; i < abilitySpecials_list.Count; i++)
+				if (abilitySpecials_list[i].HasChildren)
+					//for (int a = 0; a < abilitySpecials_list[i].children.Count; a++)
+					AddSpecial(abilitySpecials_list[i]);
+		}
 
-		public string[] GetNewBehaviors()
+		public KeyValue GetNewSpecials()
 		{
-			List<string> str = new List<string>();
+			KeyValue newSpecials = new KeyValue("AbilitySpecial");
 			for (int i = 0; i < s.Children.Count - 1; i++)			//-1 Because "Add Behavior" button is a child
 			{
-				DockPanel t = (DockPanel)s.Children[i];
-				ComboBox cbox = (ComboBox)t.Children[1];
-				str.Add(cbox.SelectedItem.ToString());
+				Grid g = (Grid)s.Children[i];
+				ComboBox t = (ComboBox)g.Children[0];
+				TextBox n = (TextBox)g.Children[1];
+				TextBox v = (TextBox)g.Children[2];
+
+				if (t.SelectedItem.ToString() == "") t.SelectedItem = t.Items[0];
+				if (n.Text == "") n.Text = "var_" + (i + 1);
+				if (v.Text == "") v.Text = "0";
+
+				KeyValue abilitySpecial = new KeyValue((i + 1).ToString("D2"));
+				KeyValue var_type = new KeyValue("var_type", t.SelectedItem.ToString());
+				KeyValue var = new KeyValue(n.Text, v.Text);
+
+				abilitySpecial.AddChild(var_type);
+				abilitySpecial.AddChild(var);
+
+				newSpecials.AddChild(abilitySpecial);
 			}
-			return str.ToArray();
+			return newSpecials;
 		}
 
-		private void AddComboBox()
+		private void AddSpecial(KeyValue special)
 		{
-			AddComboBox("");
+			Thickness margin = new Thickness(0, 0, 3, 0);
+			Grid grid = new Grid();
+			ComboBox type = new ComboBox();
+			TextBox name = new TextBox();
+			TextBox value = new TextBox();
+			Button delete = new Button();
+
+			type.Margin = margin;
+			name.Margin = margin;
+			value.Margin = margin;
+
+			type.ToolTip = "Type";
+			name.ToolTip = "Name";
+			value.ToolTip = "Value";
+
+			type.VerticalAlignment = VerticalAlignment.Center;
+			name.VerticalAlignment = VerticalAlignment.Center;
+			value.VerticalAlignment = VerticalAlignment.Center;
+			delete.VerticalAlignment = VerticalAlignment.Center;
+
+			for (int i = 0; i < specialType_combobox_base.Items.Count; i++)
+				type.Items.Add(specialType_combobox_base.Items[i]);
+			try
+			{
+				for (int i = 0; i < special.children.Count; i++)
+					if (String.Equals("var_type", special.children[i].Key))
+						type.SelectedItem = special.children[i].Value;
+					else
+					{
+						name.Text = special.children[i].Key;
+						value.Text = special.children[i].Value;
+					}
+			}
+			catch
+			{
+				type.SelectedItem = type.Items[0];
+			}
+
+			//name.Text = if(String.Equals()
+
+			delete.Content = "X";
+			delete.Background = x_button_base.Background;
+			delete.Click += RemoveSpecial_Click;
+
+			Grid.SetColumn(type, 0);
+			Grid.SetColumn(name, 1);
+			Grid.SetColumn(value, 2);
+			Grid.SetColumn(delete, 3);
+
+			grid.ColumnDefinitions.Add(new ColumnDefinition());
+			grid.ColumnDefinitions.Add(new ColumnDefinition());
+			grid.ColumnDefinitions.Add(new ColumnDefinition());
+			grid.ColumnDefinitions.Add(new ColumnDefinition());
+			grid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
+			grid.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Star);
+			grid.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
+			grid.ColumnDefinitions[3].Width = GridLength.Auto;
+
+			grid.Children.Add(type);
+			grid.Children.Add(name);
+			grid.Children.Add(value);
+			grid.Children.Add(delete);
+
+			s.Children.Insert(s.Children.Count - 1, grid);
 		}
 
-		private void AddComboBox(string item)
+		private void AddSpecial_Click(object sender, RoutedEventArgs e)
 		{
-			DockPanel dockPanel = new DockPanel();
-			ComboBox c = new ComboBox();
-			for (int i = 0; i < abilityBehavior_combobox_base.Items.Count; i++)
-				c.Items.Add(abilityBehavior_combobox_base.Items[i]);
-			c.SelectedItem = item;
-
-			Button b = new Button();
-			b.Background = x_button_base.Background;
-			b.Content = "X";
-			b.Margin = new Thickness(4, 0, 0, 0);
-			b.Click += RemoveBehavior_Click;
-
-			DockPanel.SetDock(b, Dock.Right);
-			dockPanel.Children.Add(b);
-			dockPanel.Children.Add(c);
-			dockPanel.Margin = new Thickness(0, 0, 0, 4);
-			s.Children.Insert(s.Children.Count - 1, dockPanel);		//Insert the DockPanel on top of the button
+			AddSpecial(new KeyValue(""));
 		}
 
-		private void AddBehavior_Click(object sender, RoutedEventArgs e)
-		{
-			AddComboBox(abilityBehavior_combobox_base.Items[0].ToString());
-		}
-
-		private void RemoveBehavior_Click(object sender, RoutedEventArgs e)
+		private void RemoveSpecial_Click(object sender, RoutedEventArgs e)
 		{
 			var tempButton = (Button)sender;
-			var parent = (UIElement)tempButton.Parent;
+			var parent = (Grid)tempButton.Parent;
 			s.Children.Remove(parent);
 		}
 	}

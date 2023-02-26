@@ -113,6 +113,9 @@
     <Compile Include="Windows\ItemShopTagsDialog.xaml.cs">
       <DependentUpon>ItemShopTagsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ModifiersDialog.xaml.cs">
+      <DependentUpon>ModifiersDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\PromptDialog.xaml.cs">
       <DependentUpon>PromptDialog.xaml</DependentUpon>
     </Compile>
@@ -205,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ItemShopTagsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ModifiersDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

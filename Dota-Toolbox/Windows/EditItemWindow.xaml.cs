@@ -35,6 +35,7 @@ namespace Dota_Toolbox.Windows
 		private ItemShopTagsDialog itemShopTagsDialog;
 		private ItemDeclarationsDialog itemDeclarationsDialog;
 		private AbilitySpecialDialog abilitySpecialDialog;
+		private ModifiersDialog modifiersDialog;
 
 		public EditItemWindow()
 		{
@@ -234,6 +235,13 @@ namespace Dota_Toolbox.Windows
 			abilitySpecialDialog.ShowDialog();
 			if (abilitySpecialDialog.DialogResult == true)
 				a.abilitySpecials = abilitySpecialDialog.GetNewSpecials();
+		}
+
+		private void Modifiers_Click(object sender, RoutedEventArgs e)
+		{
+			modifiersDialog = new ModifiersDialog();
+			modifiersDialog.Owner = ModernWindow.GetWindow(this);
+			modifiersDialog.modifiers_list = a.modifiers.Children.ToList();
 		}
 
 		private void OK_Click(object sender, RoutedEventArgs e)

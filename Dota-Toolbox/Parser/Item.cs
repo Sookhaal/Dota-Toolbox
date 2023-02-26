@@ -52,6 +52,7 @@ namespace Dota_Toolbox.Parser
 
 		//Spell
 		private KeyValue _abilitySpecials;
+		private KeyValue _modifiers;
 
 		#region Get/Set
 		public KeyValue item
@@ -223,6 +224,11 @@ namespace Dota_Toolbox.Parser
 			get { return _abilitySpecials; }
 			set { _abilitySpecials = value; }
 		}
+		public KeyValue modifiers
+		{
+			get { return _modifiers; }
+			set { _modifiers = value; }
+		}
 		#endregion
 		#endregion
 
@@ -270,6 +276,7 @@ namespace Dota_Toolbox.Parser
 
 			//Spell
 			this.abilitySpecials = GetKV("AbilitySpecial");
+			this.modifiers = GetKV("Modifiers");
 		}
 
 		#region Methods

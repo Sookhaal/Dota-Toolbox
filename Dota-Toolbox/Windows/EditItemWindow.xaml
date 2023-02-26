@@ -169,10 +169,8 @@
 						<ColumnDefinition Width="*"/>
 						<ColumnDefinition Width="*"/>
 					</Grid.ColumnDefinitions>
-					<!--<Button    Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="NOT YET IMPLEMENTED" Grid.ColumnSpan="3"/>-->
-					<Button    Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="Ability Special"  Click="Special_Click"/>
-					<!--<Button    Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="On Spell Start"  Click="Declarations_Click"/>
-					<Button    Grid.Column="2" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="Item Declarations"  Click="Declarations_Click"/>-->
+					<Button    Grid.Column="0" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="Modifiers"  Click="Modifiers_Click"/>
+					<Button    Grid.Column="1" Margin="0 0 4 0" VerticalAlignment="Center" ToolTip="Fix Tooltip." Content="Ability Special"  Click="Special_Click"/>
 				</Grid>
 				<Separator Height="15"/>
 				<Grid>
